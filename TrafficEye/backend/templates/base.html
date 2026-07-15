@@ -1,11 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrafficEye</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
 <body>
 
 <header>
+
     <h1>🚦 TrafficEye</h1>
+
+    <nav>
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'register' %}">Register</a> |
+        <a href="{% url 'login' %}">Login</a>
+    </nav>
+
+    <hr>
+
 </header>
+
+<main>
 
 {% block content %}
 
 {% endblock %}
 
+</main>
+
+<hr>
+
+<footer>
+
+    <p>TrafficEye © 2026 | RiteshKumar Badgujar</p>
+
+</footer>
+
 </body>
+</html>

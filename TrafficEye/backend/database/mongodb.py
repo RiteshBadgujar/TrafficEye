@@ -1,29 +1,12 @@
 from pymongo import MongoClient
-from dotenv import load_dotenv
-import os
 
-# Load environment variables
-load_dotenv()
+# MongoDB Connection
+client = MongoClient("mongodb://localhost:27017/")
 
-# Read values from .env
-MONGO_URI = os.getenv("MONGO_URI")
-DATABASE_NAME = os.getenv("DATABASE_NAME")
+# Database
+db = client["trafficeye"]
 
-try:
-    # Create MongoDB client
-    client = MongoClient(MONGO_URI)
+# Collections
+users_collection = db["users"]
 
-    # Select database
-    db = client[DATABASE_NAME]
-
-    # Verify connection
-    client.admin.command("ping")
-
-    print("===================================")
-    print("MongoDB Connected Successfully")
-    print(f"Database : {DATABASE_NAME}")
-    print("===================================")
-
-except Exception as e:
-    print("MongoDB Connection Failed")
-    print(e)
+print("MongoDB Connected Successfully")

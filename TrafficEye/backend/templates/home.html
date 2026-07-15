@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section>
+
+    <h2>Welcome to TrafficEye 🚦</h2>
+
+    <p>
+        TrafficEye is a Smart City Traffic Violation Management System
+        developed using <strong>Django</strong> and <strong>MongoDB</strong>.
+    </p>
+
+    <h3>Project Features</h3>
+
+    <ul>
+        <li>👤 User Registration</li>
+        <li>🔐 Secure Login</li>
+        <li>🚗 Traffic Violation Management</li>
+        <li>📊 Dashboard</li>
+        <li>🗄 MongoDB Integration</li>
+    </ul>
+
+    <br>
+
+    <a href="{% url 'register' %}">
+        <button>Get Started</button>
+    </a>
+
+    <a href="{% url 'login' %}">
+        <button>Login</button>
+    </a>
+
+</section>
+
+{% endblock %}

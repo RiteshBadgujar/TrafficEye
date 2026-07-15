@@ -2,29 +2,26 @@
 
 {% block content %}
 
-<h2>User Registration</h2>
+<h2>Dashboard</h2>
 
-<form>
+<h3>Welcome {{ request.session.user_name }} 👋</h3>
 
-    <label>Full Name</label><br>
-    <input type="text" placeholder="Enter Full Name"><br><br>
+<p>You have successfully logged in.</p>
 
-    <label>Email</label><br>
-    <input type="email" placeholder="Enter Email"><br><br>
+<hr>
 
-    <label>Mobile Number</label><br>
-    <input type="text" placeholder="Enter Mobile Number"><br><br>
+<h3>Quick Menu</h3>
 
-    <label>Password</label><br>
-    <input type="password" placeholder="Enter Password"><br><br>
+<ul>
+    <li><a href="#">Manage Traffic Violations</a></li>
+    <li><a href="#">Reports</a></li>
+    <li><a href="#">Profile</a></li>
+</ul>
 
-    <label>Confirm Password</label><br>
-    <input type="password" placeholder="Confirm Password"><br><br>
+<br>
 
-    <button type="submit">
-        Register
-    </button>
-
-</form>
+<a href="{% url 'logout' %}">
+    <button>Logout</button>
+</a>
 
 {% endblock %}
