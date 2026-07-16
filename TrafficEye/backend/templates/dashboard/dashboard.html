@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Dashboard</h2>
+
+<h3>Welcome {{ request.session.user_name }} 👋</h3>
+
+<p>You have successfully logged in.</p>
+
+<hr>
+
+<h3>Quick Menu</h3>
+
+<ul>
+    <li><a href="#">Manage Traffic Violations</a></li>
+    <li><a href="#">Reports</a></li>
+    <li><a href="#">Profile</a></li>
+</ul>
+
+<br>
+
+<a href="{% url 'logout' %}">
+    <button>Logout</button>
+</a>
+
+{% endblock %}

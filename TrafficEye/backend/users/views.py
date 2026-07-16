@@ -4,7 +4,7 @@ from database.mongodb import users_collection
 
 
 def home(request):
-    return render(request, "home.html")
+    return render(request, "home/home.html")
 
 
 def login(request):
@@ -33,7 +33,7 @@ def login(request):
         else:
             message = "Email not found."
 
-    return render(request, "login.html", {"message": message})
+    return render(request, "auth/login.html", {"message": message})
 
 
 def register(request):
@@ -80,7 +80,7 @@ def register(request):
 
                 message = "Registration Successful!"
 
-    return render(request, "register.html", {"message": message})
+    return render(request, "auth/register.html", {"message": message})
 
 
 def dashboard(request):
@@ -88,9 +88,11 @@ def dashboard(request):
     if "user_email" not in request.session:
         return redirect("login")
 
-    return render(request, "dashboard.html")
+    return render(request, "dashboard/dashboard.html")
+
 
 def logout(request):
-    
+
     request.session.flush()
+
     return redirect("home")

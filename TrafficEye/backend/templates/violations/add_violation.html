@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Add Traffic Violation</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <label>Vehicle Number</label><br>
+    <input type="text" name="vehicle_number" required><br><br>
+
+    <label>Owner Name</label><br>
+    <input type="text" name="owner_name" required><br><br>
+
+    <label>Violation Type</label><br>
+
+    <select name="violation_type">
+
+        <option>Helmet Not Worn</option>
+        <option>No Seat Belt</option>
+        <option>Signal Jump</option>
+        <option>Over Speed</option>
+        <option>Wrong Parking</option>
+
+    </select>
+
+    <br><br>
+
+    <label>Location</label><br>
+    <input type="text" name="location" required><br><br>
+
+    <label>Fine Amount</label><br>
+    <input type="number" name="fine_amount" required><br><br>
+
+    <label>Officer Name</label><br>
+    <input type="text" name="officer_name" required><br><br>
+
+    <button type="submit">
+        Save Violation
+    </button>
+
+</form>
+
+{% endblock %}

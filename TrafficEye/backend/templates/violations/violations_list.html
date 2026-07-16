@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Traffic Violation List</h2>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Vehicle</th>
+    <th>Owner</th>
+    <th>Violation</th>
+    <th>Location</th>
+    <th>Fine</th>
+    <th>Officer</th>
+    <th>Date</th>
+    <th>Status</th>
+</tr>
+
+{% for violation in violations %}
+
+<tr>
+
+<td>{{ violation.vehicle_number }}</td>
+<td>{{ violation.owner_name }}</td>
+<td>{{ violation.violation_type }}</td>
+<td>{{ violation.location }}</td>
+<td>₹ {{ violation.fine_amount }}</td>
+<td>{{ violation.officer_name }}</td>
+<td>{{ violation.date }}</td>
+<td>{{ violation.status }}</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="8">
+        No Traffic Violations Found.
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{% url 'add_violation' %}">
+    <button>Add New Violation</button>
+</a>
+
+{% endblock %}

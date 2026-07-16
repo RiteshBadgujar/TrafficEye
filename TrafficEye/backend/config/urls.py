@@ -6,4 +6,7 @@ urlpatterns = [
 
     # Users App
     path("", include("users.urls")),
+    
+    path("violations/", include("violations.urls")),
+
 ]
