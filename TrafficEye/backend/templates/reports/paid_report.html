@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Paid Fines</h2>
+
+<hr>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>Vehicle</th>
+        <th>Owner</th>
+        <th>Violation</th>
+        <th>Officer</th>
+        <th>Fine</th>
+        <th>Date</th>
+    </tr>
+
+    {% for violation in violations %}
+
+    <tr>
+
+        <td>{{ violation.vehicle_number }}</td>
+        <td>{{ violation.owner_name }}</td>
+        <td>{{ violation.violation_type }}</td>
+        <td>{{ violation.officer_name }}</td>
+        <td>₹ {{ violation.fine_amount }}</td>
+        <td>{{ violation.date }}</td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+
+        <td colspan="6">
+
+            No Paid Records
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<br>
+
+<h3>Total Collection : ₹ {{ total_collection }}</h3>
+
+{% endblock %}

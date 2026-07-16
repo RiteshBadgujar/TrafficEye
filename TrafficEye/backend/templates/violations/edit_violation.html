@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Traffic Violation</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+Vehicle Number<br>
+<input
+type="text"
+name="vehicle_number"
+value="{{ violation.vehicle_number }}"><br><br>
+
+Owner Name<br>
+<input
+type="text"
+name="owner_name"
+value="{{ violation.owner_name }}"><br><br>
+
+Violation Type<br>
+<input
+type="text"
+name="violation_type"
+value="{{ violation.violation_type }}"><br><br>
+
+Location<br>
+<input
+type="text"
+name="location"
+value="{{ violation.location }}"><br><br>
+
+Fine Amount<br>
+<input
+type="number"
+name="fine_amount"
+value="{{ violation.fine_amount }}"><br><br>
+
+Officer Name<br>
+<input
+type="text"
+name="officer_name"
+value="{{ violation.officer_name }}"><br><br>
+
+Status<br>
+
+<select name="status">
+
+<option value="Pending">Pending</option>
+<option value="Paid">Paid</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+
+Update Violation
+
+</button>
+
+</form>
+
+{% endblock %}

@@ -2,26 +2,72 @@
 
 {% block content %}
 
-<h2>Dashboard</h2>
+<h2>TrafficEye Dashboard</h2>
 
-<h3>Welcome {{ request.session.user_name }} 👋</h3>
-
-<p>You have successfully logged in.</p>
+<h3>Welcome {{ user_name }}</h3>
 
 <hr>
 
-<h3>Quick Menu</h3>
+<h3>Statistics</h3>
 
 <ul>
-    <li><a href="#">Manage Traffic Violations</a></li>
-    <li><a href="#">Reports</a></li>
-    <li><a href="#">Profile</a></li>
+
+<li>Total Users : {{ total_users }}</li>
+
+<li>Total Violations : {{ total_violations }}</li>
+
+<li>Pending Fines : {{ pending_fines }}</li>
+
+<li>Paid Fines : {{ paid_fines }}</li>
+
 </ul>
 
-<br>
+<hr>
 
-<a href="{% url 'logout' %}">
-    <button>Logout</button>
-</a>
+<h3>Recent Violations</h3>
+
+<table border="1">
+
+<tr>
+
+<th>Vehicle</th>
+
+<th>Owner</th>
+
+<th>Violation</th>
+
+<th>Fine</th>
+
+</tr>
+
+{% for violation in recent_violations %}
+
+<tr>
+
+<td>{{ violation.vehicle_number }}</td>
+
+<td>{{ violation.owner_name }}</td>
+
+<td>{{ violation.violation_type }}</td>
+
+<td>₹ {{ violation.fine_amount }}</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+<td colspan="4">
+
+No Records Found
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
 
 {% endblock %}

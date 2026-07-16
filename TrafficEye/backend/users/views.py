@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 from database.mongodb import users_collection
-
+from database.mongodb import users_collection
+from database.mongodb import violations_collection
+from bson import ObjectId
+from django.shortcuts import redirect
 
 def home(request):
     return render(request, "home/home.html")
@@ -82,17 +85,50 @@ def register(request):
 
     return render(request, "auth/register.html", {"message": message})
 
-
 def dashboard(request):
 
     if "user_email" not in request.session:
         return redirect("login")
 
-    return render(request, "dashboard/dashboard.html")
+    total_users = users_collection.count_documents({})
 
+    total_violations = violations_collection.count_documents({})
 
+    pending_fines = violations_collection.count_documents({
+        "status": "Pending"
+    })
+
+    paid_fines = violations_collection.count_documents({
+        "status": "Paid"
+    })
+
+    recent_violations = list(
+        violations_collection.find().sort("_id", -1).limit(5)
+    )
+
+    context = {
+
+        "user_name": request.session["user_name"],
+
+        "total_users": total_users,
+
+        "total_violations": total_violations,
+
+        "pending_fines": pending_fines,
+
+        "paid_fines": paid_fines,
+
+        "recent_violations": recent_violations
+
+    }
+
+    return render(request,
+                  "dashboard/dashboard.html",
+                  context)
+    
 def logout(request):
 
     request.session.flush()
 
     return redirect("home")
+

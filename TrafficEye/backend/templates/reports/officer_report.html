@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Officer Report</h2>
+
+<hr>
+
+<form method="GET">
+
+    <input
+        type="text"
+        name="officer_name"
+        placeholder="Enter Officer Name">
+
+    <button type="submit">
+
+        Search
+
+    </button>
+
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+
+        <th>Vehicle</th>
+        <th>Owner</th>
+        <th>Violation</th>
+        <th>Officer</th>
+        <th>Fine</th>
+        <th>Status</th>
+        <th>Date</th>
+
+    </tr>
+
+    {% for violation in violations %}
+
+    <tr>
+
+        <td>{{ violation.vehicle_number }}</td>
+        <td>{{ violation.owner_name }}</td>
+        <td>{{ violation.violation_type }}</td>
+        <td>{{ violation.officer_name }}</td>
+        <td>₹ {{ violation.fine_amount }}</td>
+        <td>{{ violation.status }}</td>
+        <td>{{ violation.date }}</td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+
+        <td colspan="7">
+
+            No Records Found
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}

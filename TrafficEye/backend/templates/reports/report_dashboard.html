@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Traffic Reports</h2>
+
+<hr>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <td>Total Violations</td>
+    <td>{{ total_violations }}</td>
+</tr>
+
+<tr>
+    <td>Pending Fines</td>
+    <td>{{ pending_fines }}</td>
+</tr>
+
+<tr>
+    <td>Paid Fines</td>
+    <td>{{ paid_fines }}</td>
+</tr>
+
+<tr>
+    <td>Total Collection</td>
+    <td>₹ {{ total_collection }}</td>
+</tr>
+
+</table>
+
+{% endblock %}
