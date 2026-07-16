@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from database.mongodb import violations_collection
 from datetime import datetime
+import csv
+from django.http import HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
 
 def report_dashboard(request):
 
@@ -256,3 +260,113 @@ def paid_report(request):
             "total_collection": total_collection
         }
     )
+    # Export all violations to CSV
+def export_csv(request):
+
+    response = HttpResponse(content_type="text/csv")
+
+    response["Content-Disposition"] = (
+        'attachment; filename="traffic_violations.csv"'
+    )
+
+    writer = csv.writer(response)
+
+    writer.writerow([
+        "Vehicle Number",
+        "Owner Name",
+        "Violation Type",
+        "Officer Name",
+        "Location",
+        "Fine Amount",
+        "Status",
+        "Date"
+    ])
+
+    violations = violations_collection.find()
+
+    for violation in violations:
+
+        writer.writerow([
+            violation.get("vehicle_number"),
+            violation.get("owner_name"),
+            violation.get("violation_type"),
+            violation.get("officer_name"),
+            violation.get("location"),
+            violation.get("fine_amount"),
+            violation.get("status"),
+            violation.get("date")
+        ])
+
+    return response
+
+def export_pdf(request):
+
+    response = HttpResponse(content_type="application/pdf")
+
+    response["Content-Disposition"] = (
+        'attachment; filename="traffic_report.pdf"'
+    )
+
+    pdf = SimpleDocTemplate(response)
+
+    data = [
+
+        [
+            "Vehicle",
+            "Owner",
+            "Violation",
+            "Officer",
+            "Fine",
+            "Status",
+            "Date"
+        ]
+
+    ]
+
+    violations = violations_collection.find()
+
+    for violation in violations:
+
+        data.append([
+
+            violation.get("vehicle_number"),
+
+            violation.get("owner_name"),
+
+            violation.get("violation_type"),
+
+            violation.get("officer_name"),
+
+            str(violation.get("fine_amount")),
+
+            violation.get("status"),
+
+            violation.get("date")
+
+        ])
+
+    table = Table(data)
+
+    table.setStyle(
+
+        TableStyle([
+
+            ("BACKGROUND", (0,0), (-1,0), colors.grey),
+
+            ("TEXTCOLOR", (0,0), (-1,0), colors.whitesmoke),
+
+            ("GRID", (0,0), (-1,-1), 1, colors.black),
+
+            ("BACKGROUND", (0,1), (-1,-1), colors.beige),
+
+            ("ALIGN", (0,0), (-1,-1), "CENTER"),
+
+            ("BOTTOMPADDING", (0,0), (-1,0), 10)
+
+        ])
+
+    )
+
+    pdf.build([table])
+
+    return response

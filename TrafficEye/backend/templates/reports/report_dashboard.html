@@ -29,5 +29,17 @@
 </tr>
 
 </table>
+<br>
+
+<a href="{% url 'export_csv' %}">
+    <button>
+        Export CSV
+    </button>
+</a>
+<a href="{% url 'export_pdf' %}">
+    <button>
+        Export PDF
+    </button>
+</a>
 
 {% endblock %}
