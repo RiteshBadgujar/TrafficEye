@@ -10,5 +10,7 @@ urlpatterns = [
     path("violations/", include("violations.urls")),
     
     path("reports/", include("reports.urls")),
+    
+    path("api/", include("api.urls")),
 
 ]
