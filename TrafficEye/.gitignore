@@ -1,27 +1,66 @@
+# ==========================
 # Python
+# ==========================
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
+*.so
 
+# ==========================
 # Virtual Environment
+# ==========================
 venv/
+.venv/
+env/
+ENV/
+
+# Environment Variables
 .env
+.env.*
 
-# SQLite
+# ==========================
+# Database
+# ==========================
 db.sqlite3
+*.sqlite3
 
+# ==========================
 # IDE
+# ==========================
 .vscode/
 .idea/
+*.swp
 
-# Python cache
+# ==========================
+# Python Cache
+# ==========================
 .pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 *.log
 
-# OS
-.DS_Store
-Thumbs.db
+# ==========================
+# Django
+# ==========================
+media/
+staticfiles/
 
+# Migrations (Optional)
+# Uncomment if you don't want migrations in Git
+# */migrations/
+# !*/migrations/__init__.py
+
+# ==========================
 # Uploads
+# ==========================
 uploads/*
 !uploads/.gitkeep
+
+# ==========================
+# Operating System
+# ==========================
+.DS_Store
+Thumbs.db
+desktop.ini

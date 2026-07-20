@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from database.mongodb import violations_collection
 from datetime import datetime
 import csv
@@ -7,6 +7,9 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 
 def report_dashboard(request):
+    
+    if "user_id" not in request.session:
+        return redirect("login")
 
     total_violations = violations_collection.count_documents({})
 
@@ -44,8 +47,11 @@ def report_dashboard(request):
 
 # Daily Report
 def daily_report(request):
+    
+    if "user_id" not in request.session:
+        return redirect("login")
 
-    today = datetime.now().strftime("%d-%m-%Y")
+    today = datetime.now().strftime("%Y-%m-%d")
 
     violations = list(
         violations_collection.find({
@@ -79,6 +85,9 @@ def daily_report(request):
 # Monthly Report
 def monthly_report(request):
 
+    if "user_id" not in request.session:
+        return redirect("login")
+
     current_month = datetime.now().strftime("%m-%Y")
 
     violations = list(violations_collection.find())
@@ -88,33 +97,35 @@ def monthly_report(request):
 
     for violation in violations:
 
-        # date format: dd-mm-yyyy
-        month_year = "-".join(violation["date"].split("-")[1:])
+        date_parts = violation["date"].split("-")
 
-        if month_year == current_month:
+        if len(date_parts) == 3:
 
-            violation["id"] = str(violation["_id"])
-            monthly_violations.append(violation)
+            month_year = f"{date_parts[1]}-{date_parts[0]}"
 
-            if violation["status"] == "Paid":
-                total_collection += int(violation["fine_amount"])
+            if month_year == current_month:
 
-    context = {
+                violation["id"] = str(violation["_id"])
+                monthly_violations.append(violation)
 
-        "month": current_month,
-        "violations": monthly_violations,
-        "total_collection": total_collection
-
-    }
+                if violation["status"] == "Paid":
+                    total_collection += int(violation["fine_amount"])
 
     return render(
         request,
         "reports/monthly_report.html",
-        context
+        {
+            "month": current_month,
+            "violations": monthly_violations,
+            "total_collection": total_collection
+        }
     )
 
 # Yearly Report
 def yearly_report(request):
+
+    if "user_id" not in request.session:
+        return redirect("login")
 
     current_year = datetime.now().strftime("%Y")
 
@@ -125,15 +136,19 @@ def yearly_report(request):
 
     for violation in violations:
 
-        year = violation["date"].split("-")[2]
+        date_parts = violation["date"].split("-")
 
-        if year == current_year:
+        if len(date_parts) == 3:
 
-            violation["id"] = str(violation["_id"])
-            yearly_data.append(violation)
+            year = date_parts[0]
 
-            if violation["status"] == "Paid":
-                total_collection += int(violation["fine_amount"])
+            if year == current_year:
+
+                violation["id"] = str(violation["_id"])
+                yearly_data.append(violation)
+
+                if violation["status"] == "Paid":
+                    total_collection += int(violation["fine_amount"])
 
     return render(
         request,
@@ -145,9 +160,11 @@ def yearly_report(request):
         }
     )
 
-
 # Vehicle Report
 def vehicle_report(request):
+
+    if "user_id" not in request.session:
+        return redirect("login")
 
     vehicle_number = request.GET.get("vehicle_number")
 
@@ -181,6 +198,9 @@ def vehicle_report(request):
 # Officer Report
 def officer_report(request):
 
+    if "user_id" not in request.session:
+        return redirect("login")    
+
     officer_name = request.GET.get("officer_name")
 
     violations = []
@@ -213,6 +233,9 @@ def officer_report(request):
 # Pending Report
 def pending_report(request):
 
+    if "user_id" not in request.session:
+        return redirect("login")
+
     violations = list(
         violations_collection.find(
             {
@@ -235,6 +258,9 @@ def pending_report(request):
 
 # Paid Report
 def paid_report(request):
+
+    if "user_id" not in request.session:
+        return redirect("login")
 
     violations = list(
         violations_collection.find(
@@ -260,8 +286,11 @@ def paid_report(request):
             "total_collection": total_collection
         }
     )
+    
     # Export all violations to CSV
 def export_csv(request):
+    if "user_id" not in request.session:
+        return redirect("login")
 
     response = HttpResponse(content_type="text/csv")
 
@@ -300,6 +329,9 @@ def export_csv(request):
     return response
 
 def export_pdf(request):
+
+    if "user_id" not in request.session:
+        return redirect("login")
 
     response = HttpResponse(content_type="application/pdf")
 

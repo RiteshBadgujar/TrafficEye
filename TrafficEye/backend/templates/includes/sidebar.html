@@ -1,0 +1,66 @@
+<div class="col-md-2 bg-dark text-white min-vh-100 p-0">
+
+    <div class="sidebar py-3">
+
+        <h5 class="text-center text-warning mb-4">
+            <i class="fa-solid fa-gauge-high"></i>
+            MENU
+        </h5>
+
+        <ul class="nav flex-column">
+
+            <li class="nav-item">
+                <a href="{% url 'dashboard' %}" class="nav-link text-white">
+                    <i class="fa-solid fa-house me-2"></i>
+                    Dashboard
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'profile' %}" class="nav-link text-white">
+                    <i class="fa-solid fa-user me-2"></i>
+                    Profile
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'add_violation' %}" class="nav-link text-white">
+                    <i class="fa-solid fa-circle-plus me-2"></i>
+                    Add Violation
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'violation_list' %}" class="nav-link text-white">
+                    <i class="fa-solid fa-list me-2"></i>
+                    Violation List
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'report_dashboard' %}" class="nav-link text-white">
+                    <i class="fa-solid fa-chart-column me-2"></i>
+                    Reports
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/api/" class="nav-link text-white">
+                    <i class="fa-solid fa-code me-2"></i>
+                    REST API
+                </a>
+            </li>
+
+            <li class="nav-item mt-4">
+                <a href="{% url 'logout' %}" class="nav-link text-danger">
+                    <i class="fa-solid fa-right-from-bracket me-2"></i>
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>

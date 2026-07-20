@@ -1,0 +1,87 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+    <div class="container-fluid">
+
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">
+            <i class="fa-solid fa-shield-halved text-warning"></i>
+            TrafficEye
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+
+            <!-- Search -->
+            <form class="d-flex ms-auto me-3">
+                <input class="form-control" type="search"
+                       placeholder="Search..."
+                       aria-label="Search">
+            </form>
+
+            <!-- Notification -->
+            <ul class="navbar-nav me-3">
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="#">
+                        <i class="fa-solid fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- User Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown">
+
+                    <i class="fa-solid fa-user-circle"></i>
+                    Admin
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+
+                    <li>
+                        <a class="dropdown-item" href="{% url 'profile' %}">
+                            <i class="fa-solid fa-user me-2"></i>
+                            Profile
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{% url 'settings' %}">
+                            <i class="fa-solid fa-gear me-2"></i>
+                            Settings
+                        </a>
+                    </li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li>
+                        <a class="dropdown-item text-danger"
+                           href="{% url 'logout' %}">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                            Logout
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{% url 'search_vehicle' %}" class="nav-link text-white">
+                            <i class="fa-solid fa-magnifying-glass me-2"></i>
+                                Search Vehicle
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+</nav>

@@ -8,6 +8,17 @@ from rest_framework import status
 from database.mongodb import violations_collection
 from .serializers import ViolationSerializer
 
+from bson.errors import InvalidId
+
+
+def check_admin_session(request):
+    if "admin_id" not in request.session:
+        return Response(
+            {"message": "Unauthorized. Please login first."},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+    return None
+
 
 # ==========================
 # GET ALL VIOLATIONS
@@ -15,6 +26,10 @@ from .serializers import ViolationSerializer
 
 @api_view(["GET"])
 def get_violations(request):
+    
+    auth = check_admin_session(request)
+    if auth:
+        return auth
 
     violations = list(violations_collection.find())
 
@@ -35,6 +50,7 @@ def get_violations(request):
             "date": violation.get("date")
 
         })
+        
 
     serializer = ViolationSerializer(data, many=True)
 
@@ -47,6 +63,9 @@ def get_violations(request):
 
 @api_view(["GET"])
 def get_violation(request, violation_id):
+    auth = check_admin_session(request)
+    if auth:
+        return auth
 
     violation = violations_collection.find_one(
         {"_id": ObjectId(violation_id)}
@@ -84,6 +103,9 @@ def get_violation(request, violation_id):
 
 @api_view(["POST"])
 def create_violation(request):
+    auth = check_admin_session(request)
+    if auth:    
+        return auth
 
     data = request.data
 
@@ -117,6 +139,10 @@ def create_violation(request):
 
 @api_view(["PUT"])
 def update_violation(request, violation_id):
+
+    auth = check_admin_session(request)
+    if auth:
+        return auth
 
     try:
         data = request.data
@@ -205,6 +231,10 @@ def update_violation(request, violation_id):
 @api_view(["DELETE"])
 def delete_violation(request, violation_id):
 
+    auth = check_admin_session(request)
+    if auth:
+        return auth
+
     result = violations_collection.delete_one(
 
         {"_id": ObjectId(violation_id)}
@@ -234,6 +264,10 @@ def delete_violation(request, violation_id):
 
 @api_view(["GET"])
 def dashboard_statistics(request):
+
+    auth = check_admin_session(request)
+    if auth:
+        return auth
 
     total = violations_collection.count_documents({})
 
@@ -265,4 +299,23 @@ def dashboard_statistics(request):
 
         "total_fine_amount": total_fine
 
+    })
+    
+@api_view(["GET"])
+def api_home(request):
+    auth = check_admin_session(request)
+    if auth:
+        return auth
+
+    return Response({
+        "message": "Welcome to TrafficEye REST API",
+        "status": "Running",
+        "available_endpoints": [
+            "/api/dashboard/",
+            "/api/violations/",
+            "/api/violations/create/",
+            "/api/violations/update/<id>/",
+            "/api/violations/delete/<id>/",
+            "/api/violations/<id>/"
+        ]
     })

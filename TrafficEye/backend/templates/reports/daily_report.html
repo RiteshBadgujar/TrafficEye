@@ -1,58 +1,249 @@
 {% extends "base.html" %}
 
+{% block title %}Daily Report | TrafficEye{% endblock %}
+
 {% block content %}
 
-<h2>Daily Traffic Report</h2>
+<div class="container-fluid">
 
-<p><strong>Date :</strong> {{ today }}</p>
+    <!-- Header -->
 
-<table border="1" cellpadding="8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<tr>
+        <h2 class="fw-bold">
 
-<th>Vehicle</th>
-<th>Owner</th>
-<th>Violation</th>
-<th>Fine</th>
-<th>Status</th>
+            <i class="fa-solid fa-calendar-day text-primary"></i>
 
-</tr>
+            Daily Traffic Violation Report
 
-{% for violation in violations %}
+        </h2>
 
-<tr>
+        <a href="{% url 'report_dashboard' %}" class="btn btn-secondary">
 
-<td>{{ violation.vehicle_number }}</td>
-<td>{{ violation.owner_name }}</td>
-<td>{{ violation.violation_type }}</td>
-<td>₹ {{ violation.fine_amount }}</td>
-<td>{{ violation.status }}</td>
+            <i class="fa-solid fa-arrow-left"></i>
 
-</tr>
+            Back
 
-{% empty %}
+        </a>
 
-<tr>
+    </div>
 
-<td colspan="5">
+    <!-- Summary Cards -->
 
-No Violations Found
+    <div class="row mb-4">
 
-</td>
+        <div class="col-md-3">
 
-</tr>
+            <div class="card shadow border-0">
 
-{% endfor %}
+                <div class="card-body text-center">
 
-</table>
+                    <h6>Total Violations</h6>
 
-<br>
+                    <h2 class="text-primary">
 
-<h3>
+                        {{ total_violations }}
 
-Today's Collection :
-₹ {{ total_collection }}
+                    </h2>
 
-</h3>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6>Pending</h6>
+
+                    <h2 class="text-warning">
+
+                        {{ pending }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6>Paid</h6>
+
+                    <h2 class="text-success">
+
+                        {{ paid }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6>Total Fine</h6>
+
+                    <h2 class="text-danger">
+
+                        ₹ {{ total_fine }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Report Table -->
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                Today's Violations
+
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Vehicle</th>
+
+                        <th>Owner</th>
+
+                        <th>Violation</th>
+
+                        <th>Location</th>
+
+                        <th>Fine</th>
+
+                        <th>Status</th>
+
+                        <th>Officer</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for violation in violations %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>{{ violation.vehicle_number }}</td>
+
+                        <td>{{ violation.owner_name }}</td>
+
+                        <td>{{ violation.violation_type }}</td>
+
+                        <td>{{ violation.location }}</td>
+
+                        <td>₹ {{ violation.fine_amount }}</td>
+
+                        <td>
+
+                            {% if violation.status == "Paid" %}
+
+                                <span class="badge bg-success">
+
+                                    Paid
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Pending
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>{{ violation.officer_name }}</td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="8" class="text-center">
+
+                            No violations found for today.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Export Buttons -->
+
+    <div class="text-end mt-4">
+
+        <a href="{% url 'export_csv' %}" class="btn btn-success">
+
+            <i class="fa-solid fa-file-csv"></i>
+
+            Export CSV
+
+        </a>
+
+        <a href="{% url 'export_pdf' %}" class="btn btn-danger">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            Export PDF
+
+        </a>
+
+    </div>
+
+</div>
 
 {% endblock %}

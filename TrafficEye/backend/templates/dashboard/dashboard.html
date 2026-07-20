@@ -1,73 +1,235 @@
 {% extends "base.html" %}
 
+{% block title %}Dashboard | TrafficEye{% endblock %}
+
 {% block content %}
 
-<h2>TrafficEye Dashboard</h2>
+<div class="container-fluid">
 
-<h3>Welcome {{ user_name }}</h3>
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">
+            <i class="fa-solid fa-gauge-high text-primary"></i>
+            Dashboard
+        </h2>
 
-<hr>
+        <a href="{% url 'add_violation' %}" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i>
+            Add Violation
+        </a>
+    </div>
 
-<h3>Statistics</h3>
+    <!-- Statistics Cards -->
+    <div class="row">
 
-<ul>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-primary text-white shadow dashboard-card">
+                <div class="card-body text-center">
+                    <h5>Total Violations</h5>
+                    <h2>{{ total_violations }}</h2>
+                </div>
+            </div>
+        </div>
 
-<li>Total Users : {{ total_users }}</li>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-success text-white shadow dashboard-card">
+                <div class="card-body text-center">
+                    <h5>Paid Cases</h5>
+                    <h2>{{ paid_cases }}</h2>
+                </div>
+            </div>
+        </div>
 
-<li>Total Violations : {{ total_violations }}</li>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-warning shadow dashboard-card">
+                <div class="card-body text-center">
+                    <h5>Pending Cases</h5>
+                    <h2>{{ pending_cases }}</h2>
+                </div>
+            </div>
+        </div>
 
-<li>Pending Fines : {{ pending_fines }}</li>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-danger text-white shadow dashboard-card">
+                <div class="card-body text-center">
+                    <h5>Total Fine</h5>
+                    <h2>₹ {{ total_fine }}</h2>
+                </div>
+            </div>
+        </div>
 
-<li>Paid Fines : {{ paid_fines }}</li>
+    </div>
 
-</ul>
+    <!-- Recent Violations -->
+    <div class="card shadow mb-4">
 
-<hr>
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-car-side"></i>
+                Recent Violations
+            </h5>
+        </div>
 
-<h3>Recent Violations</h3>
+        <div class="card-body table-responsive">
 
-<table border="1">
+            <table class="table table-hover table-bordered align-middle">
 
-<tr>
+                <thead class="table-dark">
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Owner</th>
+                        <th>Violation</th>
+                        <th>Fine</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
 
-<th>Vehicle</th>
+                <tbody>
 
-<th>Owner</th>
+                {% for violation in recent_violations %}
 
-<th>Violation</th>
+                    <tr>
 
-<th>Fine</th>
+                        <td>{{ violation.vehicle_number }}</td>
 
-</tr>
+                        <td>{{ violation.owner_name }}</td>
 
-{% for violation in recent_violations %}
+                        <td>{{ violation.violation_type }}</td>
 
-<tr>
+                        <td>₹ {{ violation.fine_amount }}</td>
 
-<td>{{ violation.vehicle_number }}</td>
+                        <td>
 
-<td>{{ violation.owner_name }}</td>
+                            {% if violation.status == "Paid" %}
 
-<td>{{ violation.violation_type }}</td>
+                                <span class="badge bg-success">
+                                    Paid
+                                </span>
 
-<td>₹ {{ violation.fine_amount }}</td>
+                            {% else %}
 
-</tr>
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
 
-{% empty %}
+                            {% endif %}
 
-<tr>
+                        </td>
 
-<td colspan="4">
+                    </tr>
 
-No Records Found
+                {% empty %}
 
-</td>
+                    <tr>
 
-</tr>
+                        <td colspan="5" class="text-center">
 
-{% endfor %}
+                            No violations available.
 
-</table>
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="row mt-4">
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card chart-card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    Monthly Violations
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="monthlyChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card chart-card shadow">
+
+                <div class="card-header bg-success text-white">
+
+                    Paid vs Pending
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="statusChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="row">
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card chart-card shadow">
+
+                <div class="card-header bg-warning">
+
+                    Violation Categories
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="violationChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card chart-card shadow">
+
+                <div class="card-header bg-danger text-white">
+
+                    Yearly Trend
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="yearlyChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

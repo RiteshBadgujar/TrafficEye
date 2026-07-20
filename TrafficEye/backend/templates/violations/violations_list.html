@@ -1,90 +1,371 @@
 {% extends "base.html" %}
 
+{% block title %}Traffic Violations | TrafficEye{% endblock %}
+
 {% block content %}
 
-<h2>Traffic Violation List</h2>
+<div class="container-fluid">
 
-<table border="1" cellpadding="10">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<tr>
-    <th>Vehicle</th>
-    <th>Owner</th>
-    <th>Violation</th>
-    <th>Location</th>
-    <th>Fine</th>
-    <th>Officer</th>
-    <th>Date</th>
-    <th>Status</th>
-    <th>Action</th>
-    <th>Edit</th>
-    <th>Delete</th>
-    <th>Payment</th>
-</tr>
+        <h2 class="fw-bold">
+            <i class="fa-solid fa-road text-primary"></i>
+            Traffic Violations
+        </h2>
 
-{% for violation in violations %}
+        <a href="{% url 'add_violation' %}" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i>
+            Add Violation
+        </a>
 
-<tr>
+    </div>
 
-<td>{{ violation.vehicle_number }}</td>
-<td>{{ violation.owner_name }}</td>
-<td>{{ violation.violation_type }}</td>
-<td>{{ violation.location }}</td>
-<td>₹ {{ violation.fine_amount }}</td>
-<td>{{ violation.officer_name }}</td>
-<td>{{ violation.date }}</td>
-<td>{{ violation.status }}</td>
-<td>
-    <a href="{% url 'edit_violation' violation._id %}">
-        Edit
-    </a>
-</td>
-<td>
-    <a href="{% url 'edit_violation' violation._id %}">
-        Edit
-    </a>
-</td>
+    <!-- Search & Filter -->
+    <div class="card shadow-sm mb-4">
 
-<td>
-    <a href="{% url 'delete_violation' violation._id %}"
-       onclick="return confirm('Are you sure you want to delete this violation?');">
-        Delete
-    </a>
-</td>
+        <div class="card-body">
 
-<td>
+            <form method="GET" class="row g-3">
 
-{% if violation.status == "Pending" %}
+                <div class="col-md-3">
 
-<a href="{% url 'pay_fine' violation.id %}">
-    Pay Fine
-</a>
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Vehicle Number / Owner Name"
+                        value="{{ search }}">
 
-{% else %}
+                </div>
 
-Paid
+                <div class="col-md-2">
 
-{% endif %}
+                    <select
+                        name="status"
+                        class="form-select">
 
-</td>
+                        <option value="">All Status</option>
 
-</tr>
+                        <option value="Paid"
+                            {% if status == "Paid" %}selected{% endif %}>
+                            Paid
+                        </option>
 
-{% empty %}
+                        <option value="Pending"
+                            {% if status == "Pending" %}selected{% endif %}>
+                            Pending
+                        </option>
 
-<tr>
-    <td colspan="8">
-        No Traffic Violations Found.
-    </td>
-</tr>
+                    </select>
 
-{% endfor %}
+                </div>
 
-</table>
+                <div class="col-md-2">
 
-<br>
+                    <input
+                        type="text"
+                        name="type"
+                        class="form-control"
+                        placeholder="Violation Type"
+                        value="{{ violation_type }}">
 
-<a href="{% url 'add_violation' %}">
-    <button>Add New Violation</button>
-</a>
+                </div>
+
+                <div class="col-md-2">
+
+                    <select
+                        name="sort"
+                        class="form-select">
+
+                        <option value="newest"
+                            {% if sort == "newest" %}selected{% endif %}>
+                            Newest
+                        </option>
+
+                        <option value="oldest"
+                            {% if sort == "oldest" %}selected{% endif %}>
+                            Oldest
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3 text-end">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        Search
+
+                    </button>
+
+                    <a
+                        href="{% url 'export_csv' %}?search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}"
+                        class="btn btn-outline-success">
+
+                        <i class="fa-solid fa-file-csv"></i>
+
+                        CSV
+
+                    </a>
+
+                    <a
+                        href="{% url 'export_pdf' %}?search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}"
+                        class="btn btn-outline-danger">
+
+                        <i class="fa-solid fa-file-pdf"></i>
+
+                        PDF
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Violation Table -->
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                Violation Records
+
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover table-bordered align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Vehicle Number</th>
+
+                        <th>Owner Name</th>
+
+                        <th>Violation</th>
+
+                        <th>Location</th>
+
+                        <th>Fine</th>
+
+                        <th>Status</th>
+
+                        <th width="220">
+
+                            Actions
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for violation in page_obj %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ page_obj.start_index|add:forloop.counter0 }}
+
+                        </td>
+
+                        <td>
+
+                            {{ violation.vehicle_number }}
+
+                        </td>
+
+                        <td>
+
+                            {{ violation.owner_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ violation.violation_type }}
+
+                        </td>
+
+                        <td>
+
+                            {{ violation.location }}
+
+                        </td>
+
+                        <td>
+
+                            ₹ {{ violation.fine_amount }}
+
+                        </td>
+
+                        <td>
+
+                            {% if violation.status == "Paid" %}
+
+                                <span class="badge bg-success">
+
+                                    Paid
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Pending
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'edit_violation' violation.id %}"
+                                class="btn btn-warning btn-sm">
+
+                                <i class="fa-solid fa-pen"></i>
+
+                            </a>
+
+                            {% if violation.status == "Pending" %}
+
+                                <a
+                                    href="{% url 'pay_fine' violation.id %}"
+                                    class="btn btn-success btn-sm">
+
+                                    <i class="fa-solid fa-money-bill"></i>
+
+                                </a>
+
+                            {% endif %}
+
+                            <form method="POST" action="{% url 'delete_violation' violation.id %}" style="display:inline;">
+
+                                {% csrf_token %}
+
+                                <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Delete this violation?');">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="text-center">
+
+                            No violation records found.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Pagination -->
+
+    {% if page_obj.has_other_pages %}
+
+    <nav class="mt-4">
+
+        <ul class="pagination justify-content-center">
+
+            {% if page_obj.has_previous %}
+
+            <li class="page-item">
+
+                <a
+                    class="page-link"
+                    href="?page={{ page_obj.previous_page_number }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
+
+                    Previous
+
+                </a>
+
+            </li>
+
+            {% endif %}
+
+            {% for page in page_obj.paginator.page_range %}
+
+            <li class="page-item {% if page_obj.number == page %}active{% endif %}">
+
+                <a
+                    class="page-link"
+                    href="?page={{ page }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
+
+                    {{ page }}
+
+                </a>
+
+            </li>
+
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+
+            <li class="page-item">
+
+                <a
+                    class="page-link"
+                    href="?page={{ page_obj.next_page_number }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
+
+                    Next
+
+                </a>
+
+            </li>
+
+            {% endif %}
+
+        </ul>
+
+    </nav>
+
+    {% endif %}
+
+</div>
 
 {% endblock %}

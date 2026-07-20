@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Search Vehicle</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="input-group mb-4">
+
+            <input
+                type="text"
+                name="vehicle_no"
+                class="form-control"
+                placeholder="Enter Vehicle Number">
+
+            <button class="btn btn-primary">
+                Search
+            </button>
+
+        </div>
+
+    </form>
+
+    {% if violations %}
+
+    <table class="table table-bordered">
+
+        <tr>
+            <th>Vehicle</th>
+            <th>Violation</th>
+            <th>Location</th>
+            <th>Fine</th>
+            <th>Status</th>
+        </tr>
+
+        {% for v in violations %}
+
+        <tr>
+            <td>{{ v.vehicle_no }}</td>
+            <td>{{ v.violation_type }}</td>
+            <td>{{ v.location }}</td>
+            <td>₹{{ v.fine }}</td>
+            <td>{{ v.status }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

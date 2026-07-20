@@ -1,45 +1,234 @@
 {% extends "base.html" %}
 
+{% block title %}Reports Dashboard | TrafficEye{% endblock %}
+
 {% block content %}
 
-<h2>Traffic Reports</h2>
+<div class="container-fluid">
 
-<hr>
+    <!-- Page Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<table border="1" cellpadding="10">
+        <h2 class="fw-bold">
+            <i class="fa-solid fa-chart-line text-primary"></i>
+            Reports Dashboard
+        </h2>
 
-<tr>
-    <td>Total Violations</td>
-    <td>{{ total_violations }}</td>
-</tr>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Dashboard
+        </a>
 
-<tr>
-    <td>Pending Fines</td>
-    <td>{{ pending_fines }}</td>
-</tr>
+    </div>
 
-<tr>
-    <td>Paid Fines</td>
-    <td>{{ paid_fines }}</td>
-</tr>
+    <div class="row">
 
-<tr>
-    <td>Total Collection</td>
-    <td>₹ {{ total_collection }}</td>
-</tr>
+        <!-- Daily Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
 
-</table>
-<br>
+            <div class="card shadow border-0 h-100">
 
-<a href="{% url 'export_csv' %}">
-    <button>
-        Export CSV
-    </button>
-</a>
-<a href="{% url 'export_pdf' %}">
-    <button>
-        Export PDF
-    </button>
-</a>
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-calendar-day fa-3x text-primary mb-3"></i>
+
+                    <h5>Daily Report</h5>
+
+                    <p class="text-muted">
+                        View today's traffic violations.
+                    </p>
+
+                    <a href="{% url 'daily_report' %}" class="btn btn-primary">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Monthly Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card shadow border-0 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-calendar-days fa-3x text-success mb-3"></i>
+
+                    <h5>Monthly Report</h5>
+
+                    <p class="text-muted">
+                        Monthly violation analysis.
+                    </p>
+
+                    <a href="{% url 'monthly_report' %}" class="btn btn-success">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Yearly Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card shadow border-0 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-calendar fa-3x text-warning mb-3"></i>
+
+                    <h5>Yearly Report</h5>
+
+                    <p class="text-muted">
+                        Annual traffic report.
+                    </p>
+
+                    <a href="{% url 'yearly_report' %}" class="btn btn-warning">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Vehicle Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card shadow border-0 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-car fa-3x text-danger mb-3"></i>
+
+                    <h5>Vehicle Report</h5>
+
+                    <p class="text-muted">
+                        Search by vehicle number.
+                    </p>
+
+                    <a href="{% url 'vehicle_report' %}" class="btn btn-danger">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Officer Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card shadow border-0 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-user-shield fa-3x text-info mb-3"></i>
+
+                    <h5>Officer Report</h5>
+
+                    <p class="text-muted">
+                        Officer-wise reports.
+                    </p>
+
+                    <a href="{% url 'officer_report' %}" class="btn btn-info">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Pending Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card shadow border-0 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-clock fa-3x text-secondary mb-3"></i>
+
+                    <h5>Pending Report</h5>
+
+                    <p class="text-muted">
+                        View pending fines.
+                    </p>
+
+                    <a href="{% url 'pending_report' %}" class="btn btn-secondary">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Paid Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card shadow border-0 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-circle-check fa-3x text-success mb-3"></i>
+
+                    <h5>Paid Report</h5>
+
+                    <p class="text-muted">
+                        View paid violations.
+                    </p>
+
+                    <a href="{% url 'paid_report' %}" class="btn btn-success">
+                        View
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Export Reports -->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+            <div class="card shadow border-0 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="fa-solid fa-file-export fa-3x text-dark mb-3"></i>
+
+                    <h5>Export Reports</h5>
+
+                    <p class="text-muted">
+                        Download CSV & PDF reports.
+                    </p>
+
+                    <a href="{% url 'export_csv' %}" class="btn btn-outline-success mb-2">
+                        CSV
+                    </a>
+
+                    <a href="{% url 'export_pdf' %}" class="btn btn-outline-danger">
+                        PDF
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

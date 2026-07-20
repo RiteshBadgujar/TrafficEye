@@ -1,51 +1,296 @@
 {% extends "base.html" %}
 
+{% block title %}Monthly Report | TrafficEye{% endblock %}
+
 {% block content %}
 
-<h2>Monthly Traffic Report</h2>
+<div class="container-fluid">
 
-<p><strong>Month :</strong> {{ month }}</p>
+    <!-- Page Header -->
 
-<table border="1" cellpadding="8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<tr>
-    <th>Vehicle</th>
-    <th>Owner</th>
-    <th>Violation</th>
-    <th>Fine</th>
-    <th>Status</th>
-</tr>
+        <h2 class="fw-bold">
 
-{% for violation in violations %}
+            <i class="fa-solid fa-calendar-days text-success"></i>
 
-<tr>
+            Monthly Traffic Report
 
-<td>{{ violation.vehicle_number }}</td>
-<td>{{ violation.owner_name }}</td>
-<td>{{ violation.violation_type }}</td>
-<td>₹ {{ violation.fine_amount }}</td>
-<td>{{ violation.status }}</td>
+        </h2>
 
-</tr>
+        <a href="{% url 'report_dashboard' %}" class="btn btn-secondary">
 
-{% empty %}
+            <i class="fa-solid fa-arrow-left"></i>
 
-<tr>
+            Back
 
-<td colspan="5">
+        </a>
 
-No Records Found
+    </div>
 
-</td>
+    <!-- Month Filter -->
 
-</tr>
+    <div class="card shadow mb-4">
 
-{% endfor %}
+        <div class="card-body">
 
-</table>
+            <form method="GET" class="row g-3">
 
-<br>
+                <div class="col-md-4">
 
-<h3>Total Monthly Collection : ₹ {{ total_collection }}</h3>
+                    <label class="form-label">
+
+                        Select Month
+
+                    </label>
+
+                    <input
+                        type="month"
+                        name="month"
+                        class="form-control"
+                        value="{{ selected_month }}">
+
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+
+                    <button
+                        class="btn btn-success w-100">
+
+                        <i class="fa-solid fa-filter"></i>
+
+                        Filter
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Summary -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow text-center">
+
+                <div class="card-body">
+
+                    <h6>Total Violations</h6>
+
+                    <h2 class="text-primary">
+
+                        {{ total_violations }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow text-center">
+
+                <div class="card-body">
+
+                    <h6>Pending</h6>
+
+                    <h2 class="text-warning">
+
+                        {{ pending }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow text-center">
+
+                <div class="card-body">
+
+                    <h6>Paid</h6>
+
+                    <h2 class="text-success">
+
+                        {{ paid }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow text-center">
+
+                <div class="card-body">
+
+                    <h6>Total Fine</h6>
+
+                    <h2 class="text-danger">
+
+                        ₹ {{ total_fine }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Report Table -->
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+
+            <h5 class="mb-0">
+
+                Monthly Violations
+
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Vehicle</th>
+
+                        <th>Owner</th>
+
+                        <th>Violation</th>
+
+                        <th>Location</th>
+
+                        <th>Fine</th>
+
+                        <th>Status</th>
+
+                        <th>Officer</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for violation in violations %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>{{ violation.vehicle_number }}</td>
+
+                        <td>{{ violation.owner_name }}</td>
+
+                        <td>{{ violation.violation_type }}</td>
+
+                        <td>{{ violation.location }}</td>
+
+                        <td>₹ {{ violation.fine_amount }}</td>
+
+                        <td>
+
+                            {% if violation.status == "Paid" %}
+
+                                <span class="badge bg-success">
+
+                                    Paid
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Pending
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>{{ violation.officer_name }}</td>
+
+                        <td>{{ violation.date }}</td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="9" class="text-center">
+
+                            No records found.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Export -->
+
+    <div class="text-end mt-4">
+
+        <a href="{% url 'export_csv' %}" class="btn btn-success">
+
+            <i class="fa-solid fa-file-csv"></i>
+
+            Export CSV
+
+        </a>
+
+        <a href="{% url 'export_pdf' %}" class="btn btn-danger">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            Export PDF
+
+        </a>
+
+    </div>
+
+</div>
 
 {% endblock %}

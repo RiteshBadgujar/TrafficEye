@@ -1,46 +1,257 @@
 {% extends "base.html" %}
 
+{% block title %}Add Violation | TrafficEye{% endblock %}
+
 {% block content %}
 
-<h2>Add Traffic Violation</h2>
+<div class="container-fluid">
 
-<form method="POST">
+    <div class="row justify-content-center">
 
-    {% csrf_token %}
+        <div class="col-lg-8">
 
-    <label>Vehicle Number</label><br>
-    <input type="text" name="vehicle_number" required><br><br>
+            <div class="card shadow border-0">
 
-    <label>Owner Name</label><br>
-    <input type="text" name="owner_name" required><br><br>
+                <div class="card-header bg-primary text-white">
 
-    <label>Violation Type</label><br>
+                    <h3 class="mb-0">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        Add New Traffic Violation
+                    </h3>
 
-    <select name="violation_type">
+                </div>
 
-        <option>Helmet Not Worn</option>
-        <option>No Seat Belt</option>
-        <option>Signal Jump</option>
-        <option>Over Speed</option>
-        <option>Wrong Parking</option>
+                <div class="card-body">
 
-    </select>
+                    {% if message %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endif %}
 
-    <br><br>
+                    <form method="POST">
 
-    <label>Location</label><br>
-    <input type="text" name="location" required><br><br>
+                        {% csrf_token %}
 
-    <label>Fine Amount</label><br>
-    <input type="number" name="fine_amount" required><br><br>
+                        <div class="row">
 
-    <label>Officer Name</label><br>
-    <input type="text" name="officer_name" required><br><br>
+                            <div class="col-md-6 mb-3">
 
-    <button type="submit">
-        Save Violation
-    </button>
+                                <label class="form-label">
+                                    Vehicle Number
+                                </label>
 
-</form>
+                                <input
+                                    type="text"
+                                    name="vehicle_number"
+                                    class="form-control"
+                                    placeholder="MH15AB1234"
+                                    required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Owner Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="owner_name"
+                                    class="form-control"
+                                    placeholder="Enter Owner Name"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Violation Type
+                                </label>
+
+                                <select
+                                    name="violation_type"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="">
+                                        Select Violation
+                                    </option>
+
+                                    <option>Helmet</option>
+
+                                    <option>Seat Belt</option>
+
+                                    <option>Overspeed</option>
+
+                                    <option>Signal Jump</option>
+
+                                    <option>Wrong Parking</option>
+
+                                    <option>Drunk Driving</option>
+
+                                    <option>Mobile While Driving</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Location
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="location"
+                                    class="form-control"
+                                    placeholder="Enter Location"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Fine Amount (₹)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="fine_amount"
+                                    class="form-control"
+                                    placeholder="500"
+                                    required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Officer Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="officer_name"
+                                    class="form-control"
+                                    placeholder="Traffic Officer"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    name="date"
+                                    class="form-control"
+                                    required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Time
+                                </label>
+
+                                <input
+                                    type="time"
+                                    name="time"
+                                    class="form-control"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Payment Status
+                            </label>
+
+                            <select
+                                name="status"
+                                class="form-select"
+                                required>
+
+                                <option value="Pending">
+                                    Pending
+                                </option>
+
+                                <option value="Paid">
+                                    Paid
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="text-center">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary">
+
+                                <i class="fa-solid fa-floppy-disk"></i>
+
+                                Save Violation
+
+                            </button>
+
+                            <button
+                                type="reset"
+                                class="btn btn-secondary">
+
+                                <i class="fa-solid fa-rotate"></i>
+
+                                Reset
+
+                            </button>
+
+                            <a
+                                href="{% url 'violation_list' %}"
+                                class="btn btn-danger">
+
+                                <i class="fa-solid fa-arrow-left"></i>
+
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

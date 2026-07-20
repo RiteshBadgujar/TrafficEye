@@ -3,24 +3,18 @@ from . import views
 
 urlpatterns = [
 
+    path("", views.violation_list, name="violation_list"),
+
     path("add/", views.add_violation, name="add_violation"),
 
-    path("list/", views.violation_list, name="violation_list"),
+    path("edit/<str:violation_id>/", views.edit_violation, name="edit_violation"),
 
-    path("search/", views.search_violation, name="search_violation"),
+    path("delete/<str:violation_id>/", views.delete_violation, name="delete_violation"),
 
-    path("edit/<str:violation_id>/",
-         views.edit_violation,
-         name="edit_violation"),
+    path("pay/<str:violation_id>/", views.pay_fine, name="pay_fine"),
 
-    path("delete/<str:violation_id>/",
-         views.delete_violation,
-         name="delete_violation"),
+    path("export/csv/", views.export_csv, name="export_csv"),
     
-    path(
-    "pay/<str:violation_id>/",
-    views.pay_fine,
-    name="pay_fine"
-),
+    path( "export/pdf/", views.export_pdf, name="export_pdf"),
 
 ]

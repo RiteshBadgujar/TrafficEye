@@ -1,66 +1,252 @@
 {% extends "base.html" %}
 
+{% block title %}Edit Violation | TrafficEye{% endblock %}
+
 {% block content %}
 
-<h2>Edit Traffic Violation</h2>
+<div class="container-fluid">
 
-<form method="POST">
+    <div class="row justify-content-center">
 
-{% csrf_token %}
+        <div class="col-lg-8">
 
-Vehicle Number<br>
-<input
-type="text"
-name="vehicle_number"
-value="{{ violation.vehicle_number }}"><br><br>
+            <div class="card shadow border-0">
 
-Owner Name<br>
-<input
-type="text"
-name="owner_name"
-value="{{ violation.owner_name }}"><br><br>
+                <div class="card-header bg-warning">
 
-Violation Type<br>
-<input
-type="text"
-name="violation_type"
-value="{{ violation.violation_type }}"><br><br>
+                    <h3 class="mb-0 text-dark">
 
-Location<br>
-<input
-type="text"
-name="location"
-value="{{ violation.location }}"><br><br>
+                        <i class="fa-solid fa-pen-to-square"></i>
 
-Fine Amount<br>
-<input
-type="number"
-name="fine_amount"
-value="{{ violation.fine_amount }}"><br><br>
+                        Edit Traffic Violation
 
-Officer Name<br>
-<input
-type="text"
-name="officer_name"
-value="{{ violation.officer_name }}"><br><br>
+                    </h3>
 
-Status<br>
+                </div>
 
-<select name="status">
+                <div class="card-body">
 
-<option value="Pending">Pending</option>
-<option value="Paid">Paid</option>
+                    {% if message %}
 
-</select>
+                        <div class="alert alert-success">
 
-<br><br>
+                            {{ message }}
 
-<button type="submit">
+                        </div>
 
-Update Violation
+                    {% endif %}
 
-</button>
+                    <form method="POST">
 
-</form>
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Vehicle Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="vehicle_number"
+                                    class="form-control"
+                                    value="{{ violation.vehicle_number }}"
+                                    required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Owner Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="owner_name"
+                                    class="form-control"
+                                    value="{{ violation.owner_name }}"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Violation Type
+                                </label>
+
+                                <select
+                                    name="violation_type"
+                                    class="form-select">
+
+                                    <option {% if violation.violation_type == "Helmet" %}selected{% endif %}>Helmet</option>
+
+                                    <option {% if violation.violation_type == "Seat Belt" %}selected{% endif %}>Seat Belt</option>
+
+                                    <option {% if violation.violation_type == "Overspeed" %}selected{% endif %}>Overspeed</option>
+
+                                    <option {% if violation.violation_type == "Signal Jump" %}selected{% endif %}>Signal Jump</option>
+
+                                    <option {% if violation.violation_type == "Wrong Parking" %}selected{% endif %}>Wrong Parking</option>
+
+                                    <option {% if violation.violation_type == "Drunk Driving" %}selected{% endif %}>Drunk Driving</option>
+
+                                    <option {% if violation.violation_type == "Mobile While Driving" %}selected{% endif %}>Mobile While Driving</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Location
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="location"
+                                    class="form-control"
+                                    value="{{ violation.location }}"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Fine Amount
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="fine_amount"
+                                    class="form-control"
+                                    value="{{ violation.fine_amount }}"
+                                    required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Officer Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="officer_name"
+                                    class="form-control"
+                                    value="{{ violation.officer_name }}"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    name="date"
+                                    class="form-control"
+                                    value="{{ violation.date }}"
+                                    required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label class="form-label">
+                                    Time
+                                </label>
+
+                                <input
+                                    type="time"
+                                    name="time"
+                                    class="form-control"
+                                    value="{{ violation.time }}"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Status
+                            </label>
+
+                            <select
+                                name="status"
+                                class="form-select">
+
+                                <option value="Pending"
+                                {% if violation.status == "Pending" %}selected{% endif %}>
+                                    Pending
+                                </option>
+
+                                <option value="Paid"
+                                {% if violation.status == "Paid" %}selected{% endif %}>
+                                    Paid
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="text-center">
+
+                            <button
+                                type="submit"
+                                class="btn btn-warning">
+
+                                <i class="fa-solid fa-pen"></i>
+
+                                Update
+
+                            </button>
+
+                            <a
+                                href="{% url 'violation_list' %}"
+                                class="btn btn-secondary">
+
+                                <i class="fa-solid fa-arrow-left"></i>
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

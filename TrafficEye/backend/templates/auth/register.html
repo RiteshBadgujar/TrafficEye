@@ -1,28 +1,114 @@
-<form method="POST">
+{% extends "base.html" %}
 
-    {% csrf_token %}
+{% block title %}Register | TrafficEye{% endblock %}
 
-    <label>Full Name</label><br>
-    <input type="text" name="full_name" required><br><br>
+{% block content %}
 
-    <label>Email</label><br>
-    <input type="email" name="email" required><br><br>
+<div class="container">
 
-    <label>Mobile Number</label><br>
-    <input type="text" name="mobile" required><br><br>
+    <div class="row justify-content-center mt-5">
 
-    <label>Password</label><br>
-    <input type="password" name="password" required><br><br>
+        <div class="col-lg-6">
 
-    <label>Confirm Password</label><br>
-    <input type="password" name="confirm_password" required><br><br>
+            <div class="card shadow-lg border-0">
 
-    <button type="submit">
-        Register
-    </button>
-    {% if message %}
-    <p style="color:red; font-weight:bold;">
-        {{ message }}
-    </p>
-    {% endif %}
-</form>
+                <div class="card-header bg-success text-white text-center">
+
+                    <h3>
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+                        Create Account
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+
+                            <label>Name</label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Email</label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Password</label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Confirm Password</label>
+
+                            <input
+                                type="password"
+                                name="confirm_password"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+                        <button
+                            class="btn btn-success w-100">
+
+                            <i class="fa-solid fa-user-plus"></i>
+
+                            Register
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <div class="card-footer text-center">
+
+                    Already Registered?
+
+                    <a href="{% url 'login' %}">
+
+                        Login
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
