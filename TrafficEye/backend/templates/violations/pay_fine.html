@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Pay Fine{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-success text-white">
+
+            <h4>Confirm Payment</h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <p><strong>Vehicle:</strong> {{ violation.vehicle_number }}</p>
+
+            <p><strong>Owner:</strong> {{ violation.owner_name }}</p>
+
+            <p><strong>Fine:</strong> ₹{{ violation.fine_amount }}</p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <button class="btn btn-success">
+
+                    Mark as Paid
+
+                </button>
+
+                <a href="{% url 'violation_list' %}" class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

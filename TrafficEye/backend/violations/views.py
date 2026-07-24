@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect
-from database.mongodb import violations_collection
 from datetime import datetime
-from bson import ObjectId
-from bson.errors import InvalidId
 import csv
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-
+from django.contrib import messages
+from database.violation_service import (
+    add_violation as add_violation_service,
+    get_violation_by_id,
+    update_violation as update_violation_service,
+    delete_violation as delete_violation_service,
+    get_filtered_violations,
+    count_filtered_violations,
+    mark_fine_paid as mark_fine_paid_service,
+)
 
 
 def _safe_int(value, default=0):
@@ -44,13 +50,6 @@ def _build_query(search, status, violation_type):
 
     return query
 
-
-def _apply_sort(cursor, sort):
-    if sort == "oldest":
-        return cursor.sort("date", 1)
-    return cursor.sort("date", -1)
-
-
 # Add new violation
 def add_violation(request):
     
@@ -83,7 +82,7 @@ def add_violation(request):
             "status": "Pending"
         }
 
-        violations_collection.insert_one(violation)
+        add_violation_service(violation)
 
         return redirect("violation_list")
 
@@ -91,64 +90,49 @@ def add_violation(request):
 
 
 # Display all violations with Search, Filter, Sorting and Pagination
-
 def violation_list(request):
+
     if "user_id" not in request.session:
         return redirect("login")
 
     search = request.GET.get("search", "").strip()
-
     status = request.GET.get("status", "").strip()
-
     violation_type = request.GET.get("type", "").strip()
-
     sort = request.GET.get("sort", "newest")
-
-    page_number = request.GET.get("page")
+    page_number = request.GET.get("page", 1)
 
     query = _build_query(search, status, violation_type)
 
-    cursor = _apply_sort(violations_collection.find(query), sort)
+    cursor = get_filtered_violations(query, sort)
 
-    # Convert only the current page slice to Python objects
-    total = violations_collection.count_documents(query)
+    total = count_filtered_violations(query)
+
     paginator = Paginator(range(total), 10)
     page_obj = paginator.get_page(page_number)
 
-    # Paginator uses 1-based indices for page numbers; compute 0-based skip
     current_page = page_obj.number
     per_page = paginator.per_page
     skip = (current_page - 1) * per_page
 
-    violations = list(cursor.skip(skip).limit(per_page))
+    violations = list(
+        cursor.skip(skip).limit(per_page)
+    )
 
     for violation in violations:
         violation["id"] = str(violation["_id"])
 
-    # Rebuild a lightweight Page-like object expected by template
-    page_obj = paginator.get_page(current_page)
-    page_obj.object_list = violations
+    page_obj.object_list = violations  # type: ignore
 
     return render(
-
         request,
-
         "violations/violations_list.html",
-
         {
-
             "page_obj": page_obj,
-
             "search": search,
-
             "status": status,
-
             "violation_type": violation_type,
-
-            "sort": sort
-
-        }
-
+            "sort": sort,
+        },
     )
 
 # Search by vehicle number
@@ -159,51 +143,82 @@ def violation_list(request):
 
 
 
-# Edit violation
+# ==========================
+# EDIT VIOLATION
+# ==========================
+
 def edit_violation(request, violation_id):
 
     if "user_id" not in request.session:
         return redirect("login")
-    
-    try:
-        obj_id = ObjectId(violation_id)
-    except (TypeError, ValueError, InvalidId):
+
+    violation = get_violation_by_id(violation_id)
+
+    if not violation:
         return redirect("violation_list")
 
-    violation = violations_collection.find_one({"_id": obj_id})
-
-    if violation:
-        violation["id"] = str(violation["_id"])
+    violation["id"] = str(violation["_id"])
 
     if request.method == "POST":
 
-        vehicle_number = request.POST.get("vehicle_number")
-        vehicle_number = _safe_upper(vehicle_number)
+        vehicle_number = _safe_upper(
+            request.POST.get("vehicle_number")
+        )
 
-        officer_name = (request.POST.get("officer_name") or "").strip()
-        if not officer_name:
-            officer_name = violation.get("officer_name", "") if violation else ""
+        owner_name = (
+            request.POST.get("owner_name") or ""
+        ).strip()
 
-        fine_amount = _safe_int(request.POST.get("fine_amount"), default=0)
+        violation_type = (
+            request.POST.get("violation_type") or ""
+        ).strip()
+
+        location = (
+            request.POST.get("location") or ""
+        ).strip()
+
+        officer_name = (
+            request.POST.get("officer_name") or ""
+        ).strip()
+
+        fine_amount = _safe_int(
+            request.POST.get("fine_amount"),
+            default=0
+        )
+
+        status_value = (
+            request.POST.get("status") or "Pending"
+        ).strip()
+
+        # Validation
+        if not vehicle_number:
+            return render(
+                request,
+                "violations/edit_violation.html",
+                {
+                    "violation": violation,
+                    "error": "Vehicle Number is required."
+                }
+            )
 
         update_payload = {
             "vehicle_number": vehicle_number,
-            "owner_name": (request.POST.get("owner_name") or "").strip(),
-            "violation_type": (request.POST.get("violation_type") or "").strip(),
-            "location": (request.POST.get("location") or "").strip(),
+            "owner_name": owner_name,
+            "violation_type": violation_type,
+            "location": location,
             "fine_amount": fine_amount,
             "officer_name": officer_name,
-            "status": (request.POST.get("status") or "Pending").strip(),
+            "status": status_value,
         }
 
-        # Preserve existing date format; allow editing date if provided.
         date_str = request.POST.get("date")
-        if date_str:
-            update_payload["date"] = str(date_str)
 
-        violations_collection.update_one(
-            {"_id": obj_id},
-            {"$set": update_payload}
+        if date_str:
+            update_payload["date"] = date_str
+
+        update_violation_service(
+            violation_id,
+            update_payload
         )
 
         return redirect("violation_list")
@@ -211,56 +226,52 @@ def edit_violation(request, violation_id):
     return render(
         request,
         "violations/edit_violation.html",
-        {"violation": violation}
+        {
+            "violation": violation
+        }
     )
+# ==========================
+# DELETE VIOLATION
+# ==========================
 
-
-# Delete violation
 def delete_violation(request, violation_id):
-    
+
     if "user_id" not in request.session:
         return redirect("login")
 
-    if request.method != "POST":
+    violation = get_violation_by_id(violation_id)
+
+    if not violation:
         return redirect("violation_list")
 
-    try:
-        obj_id = ObjectId(violation_id)
-    except (TypeError, ValueError, InvalidId):
+    if request.method == "POST":
+
+        delete_violation_service(violation_id)
+
         return redirect("violation_list")
 
-    violations_collection.delete_one({"_id": obj_id})
-
-    return redirect("violation_list")
-
-
-# Mark violation as paid
-def pay_fine(request, violation_id):
-    
-    if "user_id" not in request.session:
-        return redirect("login")
-
-    try:
-        obj_id = ObjectId(violation_id)
-    except (TypeError, ValueError, InvalidId):
-        return redirect("violation_list")
-
-    violations_collection.update_one(
-        {"_id": obj_id},
-        {"$set": {"status": "Paid"}}
+    return render(
+        request,
+        "violations/delete_violation.html",
+        {
+            "violation": violation
+        }
     )
-
-    return redirect("violation_list")
 # Export Violations to CSV
 
+# ==========================
+# EXPORT VIOLATIONS TO CSV
+# ==========================
+
 def export_csv(request):
-    
+
     if "user_id" not in request.session:
         return redirect("login")
 
     response = HttpResponse(content_type="text/csv")
-
-    response["Content-Disposition"] = 'attachment; filename="traffic_violations.csv"'
+    response["Content-Disposition"] = (
+        'attachment; filename="traffic_violations.csv"'
+    )
 
     writer = csv.writer(response)
 
@@ -272,7 +283,7 @@ def export_csv(request):
         "Fine Amount",
         "Officer Name",
         "Date",
-        "Status"
+        "Status",
     ])
 
     search = request.GET.get("search", "").strip()
@@ -282,35 +293,59 @@ def export_csv(request):
 
     query = _build_query(search, status, violation_type)
 
-    cursor = _apply_sort(violations_collection.find(query), sort)
+    violations = get_filtered_violations(query, sort)
 
-    for violation in cursor:
+    for violation in violations:
 
         writer.writerow([
-
-            violation.get("vehicle_number"),
-
-            violation.get("owner_name"),
-
-            violation.get("violation_type"),
-
-            violation.get("location"),
-
-            violation.get("fine_amount"),
-
-            violation.get("officer_name"),
-
-            violation.get("date"),
-
-            violation.get("status")
-
+            violation.get("vehicle_number", ""),
+            violation.get("owner_name", ""),
+            violation.get("violation_type", ""),
+            violation.get("location", ""),
+            violation.get("fine_amount", 0),
+            violation.get("officer_name", ""),
+            violation.get("date", ""),
+            violation.get("status", ""),
         ])
 
     return response
 
+# ==========================
+# EXPORT VIOLATIONS TO PDF
+# ==========================
+
 def export_pdf(request):
-    
+
     if "user_id" not in request.session:
         return redirect("login")
-    return HttpResponse("PDF Export Coming Soon")
 
+    return HttpResponse(
+        "PDF Export Coming Soon...",
+        content_type="text/plain"
+    )
+
+
+def pay_fine(request, violation_id):
+
+    if "user_id" not in request.session:
+        return redirect("login")
+
+    if request.method == "POST":
+        mark_fine_paid_service(violation_id)
+        messages.success(request, "Fine marked as paid successfully.")
+        return redirect("violation_list")
+
+    violation = get_violation_by_id(violation_id)
+
+    if not violation:
+        return redirect("violation_list")
+
+    violation["id"] = str(violation["_id"])
+
+    return render(
+        request,
+        "violations/pay_fine.html",
+        {
+            "violation": violation
+        }
+    )

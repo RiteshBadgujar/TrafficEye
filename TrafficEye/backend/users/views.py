@@ -19,46 +19,60 @@ def home(request):
 
 
 def login(request):
+    """Authenticate a user and start a session."""
+    if "user_id" in request.session:
+        return redirect("dashboard")
 
     message = ""
 
     if request.method == "POST":
 
-        email = request.POST.get("email")
-        password = request.POST.get("password")
+        email = (request.POST.get("email") or "").strip().lower()
+        password = request.POST.get("password") or ""
 
         user = get_user_by_email(email)
-        if user:
 
-            if check_password(password, user["password"]):
-                
-                request.session["user_id"] = str(user["_id"])
-                request.session["user_email"] = user["email"]
-                request.session["user_name"] = user["full_name"]
-
-                return redirect("dashboard")
-
-            else:
-                message = "Invalid Password."
-
-        else:
+        if not user:
             message = "Email not found."
 
-    return render(request, "auth/login.html", {"message": message})
+        elif not check_password(password, user["password"]):
+            message = "Invalid Password."
 
+        else:
+            request.session["user_id"] = str(user["_id"])
+            request.session["user_email"] = user["email"]
+            request.session["user_name"] = user["full_name"]
+
+            return redirect("dashboard")
+
+    return render(
+        request,
+        "auth/login.html",
+        {
+            "message": message
+        }
+    )
+
+# ==========================
+# REGISTER USER
+# ==========================
 
 def register(request):
+    """Register a new user account."""
+    if "user_id" in request.session:
+        return redirect("dashboard")
 
     message = ""
 
     if request.method == "POST":
 
-        full_name = request.POST.get("full_name")
-        email = request.POST.get("email")
-        mobile = request.POST.get("mobile")
-        password = request.POST.get("password")
-        confirm_password = request.POST.get("confirm_password")
+        full_name = (request.POST.get("full_name") or "").strip()
+        email = (request.POST.get("email") or "").strip().lower()
+        mobile = (request.POST.get("mobile") or "").strip()
+        password = request.POST.get("password") or ""
+        confirm_password = request.POST.get("confirm_password") or ""
 
+        # Validation
         if not full_name:
             message = "Full Name is required."
 
@@ -68,34 +82,40 @@ def register(request):
         elif len(mobile) != 10 or not mobile.isdigit():
             message = "Enter a valid 10-digit mobile number."
 
+        elif len(password) < 8:
+            message = "Password must be at least 8 characters long."
+
         elif password != confirm_password:
             message = "Passwords do not match."
 
+        elif get_user_by_email(email):
+            message = "Email already registered."
+
         else:
 
-            existing_user = get_user_by_email(email)
+            user = {
+                "full_name": full_name,
+                "email": email,
+                "mobile": mobile,
+                "password": make_password(password)
+            }
 
-            if existing_user:
-                message = "Email already registered."
+            register_user(user)
 
-            else:
+            return redirect("login")
 
-                user = {
-                    "full_name": full_name,
-                    "email": email,
-                    "mobile": mobile,
-                    "password": make_password(password)
-                }
-
-                register_user(user)
-
-                message = "Registration Successful!"
-
-    return render(request, "auth/register.html", {"message": message})
-
+    return render(
+        request,
+        "auth/register.html",
+        {
+            "message": message
+        }
+    )
+    
 def dashboard(request):
-
-    if "user_email" not in request.session:
+    """Display dashboard statistics for the logged-in user."""
+    
+    if "user_id" not in request.session:
         return redirect("login")
     
     total_users = get_total_users()
@@ -107,7 +127,7 @@ def dashboard(request):
 
     context = {
 
-        "user_name": request.session["user_name"],
+        "user_name": request.session.get("user_name"),
 
         "total_users": total_users,
 
@@ -125,50 +145,84 @@ def dashboard(request):
                   "dashboard/dashboard.html",
                     context)
     
-def logout(request):
+# ==========================
+# LOGOUT
+# ==========================
 
-    if "user_email" not in request.session:
+def logout(request):
+    
+    """Authenticate a user and create a session."""
+    if "user_id" not in request.session:
         return redirect("login")
 
     request.session.flush()
 
     return redirect("home")
 
+# ==========================
+# PROFILE
+# ==========================
+
 def profile(request):
 
-    if "user_email" not in request.session:
+    """Display the logged-in user's profile."""
+        
+    if "user_id" not in request.session:
         return redirect("login")
 
     context = {
-        "user_name": request.session["user_name"],
-        "user_email": request.session["user_email"],
+        "user_name": request.session.get("user_name"),
+        "user_email": request.session.get("user_email"),
     }
 
-    return render(request, "profile.html", context)
+    return render(
+        request,
+        "profile.html",
+        context
+    )
+
+# ==========================
+# SETTINGS
+# ==========================
 
 def settings(request):
-
-    if "user_email" not in request.session:
+    """Display the user settings page."""
+    
+    if "user_id" not in request.session:
         return redirect("login")
 
     context = {
-        "user_name": request.session["user_name"],
-        "user_email": request.session["user_email"],
+        "user_name": request.session.get("user_name"),
+        "user_email": request.session.get("user_email"),
     }
 
-    return render(request, "settings/settings.html", context)
+    return render(
+        request,
+        "settings/settings.html",
+        context
+    )
 
+# ==========================
+# SEARCH VEHICLE
+# ==========================
 
 def search_vehicle(request):
 
-    if "user_email" not in request.session:
+    """Search for violations by vehicle number."""
+    
+    if "user_id" not in request.session:
         return redirect("login")
 
     violations = []
 
     if request.method == "POST":
-        vehicle_no = request.POST.get("vehicle_no")
-        violations = search_by_vehicle(vehicle_no)
+
+        vehicle_no = (
+            request.POST.get("vehicle_no") or ""
+        ).strip().upper()
+
+        if vehicle_no:
+            violations = search_by_vehicle(vehicle_no)
 
     return render(
         request,

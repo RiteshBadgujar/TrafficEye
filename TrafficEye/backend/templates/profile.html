@@ -1,22 +1,248 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}Search Vehicle | TrafficEye{% endblock %}
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container-fluid">
 
-    <div class="card shadow">
+    <!-- Page Header -->
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="fa-solid fa-magnifying-glass text-primary me-2"></i>
+
+                Search Vehicle
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Find traffic violations using a vehicle registration number.
+
+            </p>
+
+        </div>
+
+        <a href="{% url 'violation_list' %}" class="btn btn-outline-primary">
+
+            <i class="fa-solid fa-list me-2"></i>
+
+            View Violations
+
+        </a>
+
+    </div>
+
+    <!-- Search Card -->
+
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
 
         <div class="card-header bg-primary text-white">
-            <h3>Admin Profile</h3>
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-car me-2"></i>
+
+                Vehicle Search
+
+            </h5>
+
         </div>
 
         <div class="card-body">
 
-            <p><strong>Username:</strong> {{ request.user.username }}</p>
+            <form method="GET">
 
-            <p><strong>Email:</strong> {{ request.user.email }}</p>
+                <div class="row align-items-end">
 
-            <p><strong>Role:</strong> Administrator</p>
+                    <div class="col-lg-10 mb-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Vehicle Number
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="fa-solid fa-car-side"></i>
+
+                            </span>
+
+                            <input
+                                type="text"
+                                name="vehicle_number"
+                                class="form-control"
+                                placeholder="Example: MH15AB1234"
+                                value="{{ request.GET.vehicle_number }}"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 mb-3">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+
+                            <i class="fa-solid fa-magnifying-glass me-2"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Results -->
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-header bg-success text-white">
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-table me-2"></i>
+
+                Search Results
+
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>
+
+                            <i class="fa-solid fa-car me-1"></i>
+
+                            Vehicle
+
+                        </th>
+
+                        <th>
+
+                            <i class="fa-solid fa-user me-1"></i>
+
+                            Owner
+
+                        </th>
+
+                        <th>
+
+                            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+
+                            Violation
+
+                        </th>
+
+                        <th>
+
+                            <i class="fa-solid fa-indian-rupee-sign me-1"></i>
+
+                            Fine
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for violation in violations %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+
+                                {{ violation.vehicle_number }}
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            {{ violation.owner_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ violation.violation_type }}
+
+                        </td>
+
+                        <td>
+
+                            <strong>
+
+                                ₹ {{ violation.fine_amount }}
+
+                            </strong>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="4">
+
+                            <div class="text-center py-5">
+
+                                <i class="fa-solid fa-circle-xmark fa-4x text-danger mb-3"></i>
+
+                                <h4>
+
+                                    No Matching Vehicle Found
+
+                                </h4>
+
+                                <p class="text-muted">
+
+                                    Try another vehicle number.
+
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
 
         </div>
 

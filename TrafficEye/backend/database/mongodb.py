@@ -1,12 +1,32 @@
 from pymongo import MongoClient
-import os
+from pymongo.errors import ConnectionFailure
 from dotenv import load_dotenv
+import os
 
+# Load environment variables
 load_dotenv()
 
-client = MongoClient(os.getenv("MONGO_URI"))
+MONGO_URI = os.getenv("MONGO_URI")
 
-db = client["trafficeye"]
+if not MONGO_URI:
+    raise ValueError("MONGO_URI is not set in the .env file.")
 
-users_collection = db["users"]
-violations_collection = db["violations"]
+try:
+    client = MongoClient(
+        MONGO_URI,
+        serverSelectionTimeoutMS=5000
+    )
+
+    # Verify the connection
+    client.admin.command("ping")
+
+    db = client["trafficeye"]
+
+    users_collection = db["users"]
+    violations_collection = db["violations"]
+
+    print("✅ MongoDB Connected Successfully")
+
+except ConnectionFailure:
+    print("❌ Failed to connect to MongoDB.")
+    raise

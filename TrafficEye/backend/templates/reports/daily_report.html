@@ -6,107 +6,109 @@
 
 <div class="container-fluid">
 
-    <!-- Header -->
+    <!-- Page Header -->
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-        <h2 class="fw-bold">
+        <div>
 
-            <i class="fa-solid fa-calendar-day text-primary"></i>
+            <h2 class="fw-bold">
 
-            Daily Traffic Violation Report
+                <i class="fa-solid fa-calendar-day text-primary me-2"></i>
 
-        </h2>
+                Daily Traffic Violation Report
 
-        <a href="{% url 'report_dashboard' %}" class="btn btn-secondary">
+            </h2>
 
-            <i class="fa-solid fa-arrow-left"></i>
+            <p class="text-muted mb-0">
 
-            Back
+                Overview of today's traffic violations and fine collection.
+
+            </p>
+
+        </div>
+
+        <a href="{% url 'report_dashboard' %}" class="btn btn-outline-primary">
+
+            <i class="fa-solid fa-arrow-left me-2"></i>
+
+            Back to Reports
 
         </a>
 
     </div>
 
-    <!-- Summary Cards -->
+    <!-- Statistics -->
 
-    <div class="row mb-4">
+    <div class="row g-4 mb-4">
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow border-0">
+            <div class="dashboard-card card-blue">
 
-                <div class="card-body text-center">
+                <div class="dashboard-icon">
 
-                    <h6>Total Violations</h6>
-
-                    <h2 class="text-primary">
-
-                        {{ total_violations }}
-
-                    </h2>
+                    <i class="fa-solid fa-car-side"></i>
 
                 </div>
+
+                <h6>Total Violations</h6>
+
+                <h2>{{ total_violations }}</h2>
 
             </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow border-0">
+            <div class="dashboard-card card-orange">
 
-                <div class="card-body text-center">
+                <div class="dashboard-icon">
 
-                    <h6>Pending</h6>
-
-                    <h2 class="text-warning">
-
-                        {{ pending }}
-
-                    </h2>
+                    <i class="fa-solid fa-clock"></i>
 
                 </div>
+
+                <h6>Pending Cases</h6>
+
+                <h2>{{ pending }}</h2>
 
             </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow border-0">
+            <div class="dashboard-card card-green">
 
-                <div class="card-body text-center">
+                <div class="dashboard-icon">
 
-                    <h6>Paid</h6>
-
-                    <h2 class="text-success">
-
-                        {{ paid }}
-
-                    </h2>
+                    <i class="fa-solid fa-circle-check"></i>
 
                 </div>
+
+                <h6>Paid Cases</h6>
+
+                <h2>{{ paid }}</h2>
 
             </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow border-0">
+            <div class="dashboard-card card-purple">
 
-                <div class="card-body text-center">
+                <div class="dashboard-icon">
 
-                    <h6>Total Fine</h6>
-
-                    <h2 class="text-danger">
-
-                        ₹ {{ total_fine }}
-
-                    </h2>
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
 
                 </div>
+
+                <h6>Total Fine</h6>
+
+                <h2>₹ {{ total_fine }}</h2>
 
             </div>
 
@@ -116,13 +118,15 @@
 
     <!-- Report Table -->
 
-    <div class="card shadow">
+    <div class="card shadow-lg border-0 rounded-4">
 
         <div class="card-header bg-primary text-white">
 
             <h5 class="mb-0">
 
-                Today's Violations
+                <i class="fa-solid fa-table me-2"></i>
+
+                Today's Violation Records
 
             </h5>
 
@@ -130,9 +134,9 @@
 
         <div class="card-body table-responsive">
 
-            <table class="table table-bordered table-hover">
+            <table class="table table-hover align-middle">
 
-                <thead class="table-dark">
+                <thead class="table-light">
 
                     <tr>
 
@@ -164,7 +168,15 @@
 
                         <td>{{ forloop.counter }}</td>
 
-                        <td>{{ violation.vehicle_number }}</td>
+                        <td>
+
+                            <strong>
+
+                                {{ violation.vehicle_number }}
+
+                            </strong>
+
+                        </td>
 
                         <td>{{ violation.owner_name }}</td>
 
@@ -172,25 +184,37 @@
 
                         <td>{{ violation.location }}</td>
 
-                        <td>₹ {{ violation.fine_amount }}</td>
+                        <td>
+
+                            <strong>
+
+                                ₹ {{ violation.fine_amount }}
+
+                            </strong>
+
+                        </td>
 
                         <td>
 
                             {% if violation.status == "Paid" %}
 
-                                <span class="badge bg-success">
+                            <span class="badge rounded-pill bg-success px-3">
 
-                                    Paid
+                                <i class="fa-solid fa-circle-check me-1"></i>
 
-                                </span>
+                                Paid
+
+                            </span>
 
                             {% else %}
 
-                                <span class="badge bg-warning text-dark">
+                            <span class="badge rounded-pill bg-warning text-dark px-3">
 
-                                    Pending
+                                <i class="fa-solid fa-clock me-1"></i>
 
-                                </span>
+                                Pending
+
+                            </span>
 
                             {% endif %}
 
@@ -204,9 +228,25 @@
 
                     <tr>
 
-                        <td colspan="8" class="text-center">
+                        <td colspan="8">
 
-                            No violations found for today.
+                            <div class="text-center py-5">
+
+                                <i class="fa-solid fa-folder-open fa-4x text-secondary mb-3"></i>
+
+                                <h5>
+
+                                    No Violations Found Today
+
+                                </h5>
+
+                                <p class="text-muted">
+
+                                    There are no traffic violation records for today.
+
+                                </p>
+
+                            </div>
 
                         </td>
 
@@ -222,13 +262,13 @@
 
     </div>
 
-    <!-- Export Buttons -->
+    <!-- Export -->
 
-    <div class="text-end mt-4">
+    <div class="d-flex justify-content-end gap-2 mt-4 flex-wrap">
 
         <a href="{% url 'export_csv' %}" class="btn btn-success">
 
-            <i class="fa-solid fa-file-csv"></i>
+            <i class="fa-solid fa-file-csv me-2"></i>
 
             Export CSV
 
@@ -236,7 +276,7 @@
 
         <a href="{% url 'export_pdf' %}" class="btn btn-danger">
 
-            <i class="fa-solid fa-file-pdf"></i>
+            <i class="fa-solid fa-file-pdf me-2"></i>
 
             Export PDF
 

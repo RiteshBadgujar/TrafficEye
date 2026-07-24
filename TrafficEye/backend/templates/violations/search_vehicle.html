@@ -1,55 +1,257 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}Search Vehicle | TrafficEye{% endblock %}
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container-fluid">
 
-    <h2>Search Vehicle</h2>
+    <!-- Page Header -->
 
-    <form method="POST">
-        {% csrf_token %}
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-        <div class="input-group mb-4">
+        <div>
 
-            <input
-                type="text"
-                name="vehicle_no"
-                class="form-control"
-                placeholder="Enter Vehicle Number">
+            <h2 class="fw-bold">
 
-            <button class="btn btn-primary">
-                Search
-            </button>
+                <i class="fa-solid fa-magnifying-glass text-primary me-2"></i>
+
+                Search Vehicle
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Search traffic violations using a vehicle registration number.
+
+            </p>
 
         </div>
 
-    </form>
+        <a href="{% url 'violation_list' %}" class="btn btn-outline-primary">
+
+            <i class="fa-solid fa-list me-2"></i>
+
+            View Violations
+
+        </a>
+
+    </div>
+
+    <!-- Search Card -->
+
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-car me-2"></i>
+
+                Vehicle Search
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="row align-items-end">
+
+                    <div class="col-lg-10 mb-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Vehicle Number
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="fa-solid fa-car-side"></i>
+
+                            </span>
+
+                            <input
+                                type="text"
+                                name="vehicle_no"
+                                class="form-control"
+                                placeholder="Example: MH15AB1234"
+                                required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 mb-3">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+
+                            <i class="fa-solid fa-magnifying-glass me-2"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Search Results -->
 
     {% if violations %}
 
-    <table class="table table-bordered">
+    <div class="card shadow-lg border-0 rounded-4">
 
-        <tr>
-            <th>Vehicle</th>
-            <th>Violation</th>
-            <th>Location</th>
-            <th>Fine</th>
-            <th>Status</th>
-        </tr>
+        <div class="card-header bg-success text-white">
 
-        {% for v in violations %}
+            <h5 class="mb-0">
 
-        <tr>
-            <td>{{ v.vehicle_no }}</td>
-            <td>{{ v.violation_type }}</td>
-            <td>{{ v.location }}</td>
-            <td>₹{{ v.fine }}</td>
-            <td>{{ v.status }}</td>
-        </tr>
+                <i class="fa-solid fa-table me-2"></i>
 
-        {% endfor %}
+                Search Results
 
-    </table>
+            </h5>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Vehicle</th>
+
+                        <th>Violation</th>
+
+                        <th>Location</th>
+
+                        <th>Fine</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for v in violations %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+
+                                {{ v.vehicle_no }}
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            {{ v.violation_type }}
+
+                        </td>
+
+                        <td>
+
+                            {{ v.location }}
+
+                        </td>
+
+                        <td>
+
+                            <strong>
+
+                                ₹ {{ v.fine }}
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            {% if v.status == "Paid" %}
+
+                                <span class="badge rounded-pill bg-success px-3">
+
+                                    <i class="fa-solid fa-circle-check me-1"></i>
+
+                                    Paid
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge rounded-pill bg-warning text-dark px-3">
+
+                                    <i class="fa-solid fa-clock me-1"></i>
+
+                                    Pending
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% elif request.method == "POST" %}
+
+    <!-- No Results -->
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-body text-center py-5">
+
+            <i class="fa-solid fa-circle-xmark fa-4x text-danger mb-3"></i>
+
+            <h4>
+
+                No Vehicle Found
+
+            </h4>
+
+            <p class="text-muted">
+
+                No traffic violation records were found for the entered vehicle number.
+
+            </p>
+
+        </div>
+
+    </div>
 
     {% endif %}
 

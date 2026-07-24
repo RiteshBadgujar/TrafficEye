@@ -6,29 +6,63 @@
 
 <div class="container-fluid">
 
+    <!-- Page Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="fa-solid fa-pen-to-square text-warning me-2"></i>
+
+                Edit Traffic Violation
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Update the details of an existing traffic violation.
+
+            </p>
+
+        </div>
+
+        <a href="{% url 'violation_list' %}" class="btn btn-outline-primary">
+
+            <i class="fa-solid fa-list me-2"></i>
+
+            View Violations
+
+        </a>
+
+    </div>
+
     <div class="row justify-content-center">
 
-        <div class="col-lg-8">
+        <div class="col-xl-10">
 
-            <div class="card shadow border-0">
+            <div class="card shadow-lg border-0 rounded-4">
 
-                <div class="card-header bg-warning">
+                <div class="card-header bg-warning text-dark py-3">
 
-                    <h3 class="mb-0 text-dark">
+                    <h4 class="mb-0">
 
-                        <i class="fa-solid fa-pen-to-square"></i>
+                        <i class="fa-solid fa-pen-to-square me-2"></i>
 
-                        Edit Traffic Violation
+                        Update Violation
 
-                    </h3>
+                    </h4>
 
                 </div>
 
-                <div class="card-body">
+                <div class="card-body p-4">
 
                     {% if message %}
 
                         <div class="alert alert-success">
+
+                            <i class="fa-solid fa-circle-check me-2"></i>
 
                             {{ message }}
 
@@ -40,64 +74,92 @@
 
                         {% csrf_token %}
 
+                        <!-- Vehicle Information -->
+
+                        <h5 class="text-primary mb-3">
+
+                            <i class="fa-solid fa-car me-2"></i>
+
+                            Vehicle Information
+
+                        </h5>
+
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Vehicle Number
-                                </label>
+                                <label class="form-label">Vehicle Number</label>
 
-                                <input
-                                    type="text"
-                                    name="vehicle_number"
-                                    class="form-control"
-                                    value="{{ violation.vehicle_number }}"
-                                    required>
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+
+                                        <i class="fa-solid fa-car"></i>
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        name="vehicle_number"
+                                        class="form-control"
+                                        value="{{ violation.vehicle_number }}"
+                                        required>
+
+                                </div>
 
                             </div>
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Owner Name
-                                </label>
+                                <label class="form-label">Owner Name</label>
 
-                                <input
-                                    type="text"
-                                    name="owner_name"
-                                    class="form-control"
-                                    value="{{ violation.owner_name }}"
-                                    required>
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+
+                                        <i class="fa-solid fa-user"></i>
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        name="owner_name"
+                                        class="form-control"
+                                        value="{{ violation.owner_name }}"
+                                        required>
+
+                                </div>
 
                             </div>
 
                         </div>
 
+                        <hr>
+
+                        <!-- Violation Information -->
+
+                        <h5 class="text-primary mb-3">
+
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+
+                            Violation Details
+
+                        </h5>
+
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Violation Type
-                                </label>
+                                <label class="form-label">Violation Type</label>
 
-                                <select
-                                    name="violation_type"
-                                    class="form-select">
+                                <select name="violation_type" class="form-select" required>
 
                                     <option {% if violation.violation_type == "Helmet" %}selected{% endif %}>Helmet</option>
-
                                     <option {% if violation.violation_type == "Seat Belt" %}selected{% endif %}>Seat Belt</option>
-
                                     <option {% if violation.violation_type == "Overspeed" %}selected{% endif %}>Overspeed</option>
-
                                     <option {% if violation.violation_type == "Signal Jump" %}selected{% endif %}>Signal Jump</option>
-
                                     <option {% if violation.violation_type == "Wrong Parking" %}selected{% endif %}>Wrong Parking</option>
-
                                     <option {% if violation.violation_type == "Drunk Driving" %}selected{% endif %}>Drunk Driving</option>
-
                                     <option {% if violation.violation_type == "Mobile While Driving" %}selected{% endif %}>Mobile While Driving</option>
 
                                 </select>
@@ -106,9 +168,7 @@
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Location
-                                </label>
+                                <label class="form-label">Location</label>
 
                                 <input
                                     type="text"
@@ -123,26 +183,23 @@
 
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
 
-                                <label class="form-label">
-                                    Fine Amount
-                                </label>
+                                <label class="form-label">Fine Amount (₹)</label>
 
                                 <input
                                     type="number"
                                     name="fine_amount"
                                     class="form-control"
                                     value="{{ violation.fine_amount }}"
+                                    min="0"
                                     required>
 
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
 
-                                <label class="form-label">
-                                    Officer Name
-                                </label>
+                                <label class="form-label">Officer Name</label>
 
                                 <input
                                     type="text"
@@ -153,15 +210,45 @@
 
                             </div>
 
+                            <div class="col-md-4 mb-3">
+
+                                <label class="form-label">Payment Status</label>
+
+                                <select name="status" class="form-select">
+
+                                    <option value="Pending"
+                                    {% if violation.status == "Pending" %}selected{% endif %}>
+                                        Pending
+                                    </option>
+
+                                    <option value="Paid"
+                                    {% if violation.status == "Paid" %}selected{% endif %}>
+                                        Paid
+                                    </option>
+
+                                </select>
+
+                            </div>
+
                         </div>
+
+                        <hr>
+
+                        <!-- Date & Time -->
+
+                        <h5 class="text-primary mb-3">
+
+                            <i class="fa-solid fa-calendar-days me-2"></i>
+
+                            Date & Time
+
+                        </h5>
 
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Date
-                                </label>
+                                <label class="form-label">Date</label>
 
                                 <input
                                     type="date"
@@ -174,9 +261,7 @@
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Time
-                                </label>
+                                <label class="form-label">Time</label>
 
                                 <input
                                     type="time"
@@ -189,47 +274,37 @@
 
                         </div>
 
-                        <div class="mb-4">
+                        <hr>
 
-                            <label class="form-label">
-                                Status
-                            </label>
+                        <!-- Buttons -->
 
-                            <select
-                                name="status"
-                                class="form-select">
-
-                                <option value="Pending"
-                                {% if violation.status == "Pending" %}selected{% endif %}>
-                                    Pending
-                                </option>
-
-                                <option value="Paid"
-                                {% if violation.status == "Paid" %}selected{% endif %}>
-                                    Paid
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="text-center">
+                        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
 
                             <button
                                 type="submit"
-                                class="btn btn-warning">
+                                class="btn btn-warning px-4">
 
-                                <i class="fa-solid fa-pen"></i>
+                                <i class="fa-solid fa-floppy-disk me-2"></i>
 
                                 Update
 
                             </button>
 
+                            <button
+                                type="reset"
+                                class="btn btn-secondary px-4">
+
+                                <i class="fa-solid fa-rotate me-2"></i>
+
+                                Reset
+
+                            </button>
+
                             <a
                                 href="{% url 'violation_list' %}"
-                                class="btn btn-secondary">
+                                class="btn btn-danger px-4">
 
-                                <i class="fa-solid fa-arrow-left"></i>
+                                <i class="fa-solid fa-arrow-left me-2"></i>
 
                                 Cancel
 

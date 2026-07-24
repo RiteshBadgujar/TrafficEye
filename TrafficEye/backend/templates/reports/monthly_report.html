@@ -6,62 +6,87 @@
 
 <div class="container-fluid">
 
-    <!-- Page Header -->
+    <!-- Header -->
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-        <h2 class="fw-bold">
+        <div>
 
-            <i class="fa-solid fa-calendar-days text-success"></i>
+            <h2 class="fw-bold">
 
-            Monthly Traffic Report
+                <i class="fa-solid fa-calendar-days text-success me-2"></i>
 
-        </h2>
+                Monthly Traffic Report
 
-        <a href="{% url 'report_dashboard' %}" class="btn btn-secondary">
+            </h2>
 
-            <i class="fa-solid fa-arrow-left"></i>
+            <p class="text-muted mb-0">
 
-            Back
+                Analyze monthly traffic violations, fine collection, and payment status.
+
+            </p>
+
+        </div>
+
+        <a href="{% url 'report_dashboard' %}" class="btn btn-outline-success">
+
+            <i class="fa-solid fa-arrow-left me-2"></i>
+
+            Back to Reports
 
         </a>
 
     </div>
 
-    <!-- Month Filter -->
+    <!-- Filter -->
 
-    <div class="card shadow mb-4">
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-success text-white">
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-filter me-2"></i>
+
+                Filter Report
+
+            </h5>
+
+        </div>
 
         <div class="card-body">
 
-            <form method="GET" class="row g-3">
+            <form method="GET">
 
-                <div class="col-md-4">
+                <div class="row align-items-end">
 
-                    <label class="form-label">
+                    <div class="col-lg-4 mb-3">
 
-                        Select Month
+                        <label class="form-label fw-semibold">
 
-                    </label>
+                            Select Month
 
-                    <input
-                        type="month"
-                        name="month"
-                        class="form-control"
-                        value="{{ selected_month }}">
+                        </label>
 
-                </div>
+                        <input
+                            type="month"
+                            name="month"
+                            class="form-control"
+                            value="{{ selected_month }}">
 
-                <div class="col-md-2 d-flex align-items-end">
+                    </div>
 
-                    <button
-                        class="btn btn-success w-100">
+                    <div class="col-lg-2 mb-3">
 
-                        <i class="fa-solid fa-filter"></i>
+                        <button class="btn btn-success w-100">
 
-                        Filter
+                            <i class="fa-solid fa-filter me-2"></i>
 
-                    </button>
+                            Filter
+
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -71,85 +96,77 @@
 
     </div>
 
-    <!-- Summary -->
+    <!-- Summary Cards -->
 
-    <div class="row mb-4">
+    <div class="row g-4 mb-4">
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow text-center">
+            <div class="dashboard-card card-blue">
 
-                <div class="card-body">
+                <div class="dashboard-icon">
 
-                    <h6>Total Violations</h6>
-
-                    <h2 class="text-primary">
-
-                        {{ total_violations }}
-
-                    </h2>
+                    <i class="fa-solid fa-car"></i>
 
                 </div>
+
+                <h6>Total Violations</h6>
+
+                <h2>{{ total_violations }}</h2>
 
             </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow text-center">
+            <div class="dashboard-card card-orange">
 
-                <div class="card-body">
+                <div class="dashboard-icon">
 
-                    <h6>Pending</h6>
-
-                    <h2 class="text-warning">
-
-                        {{ pending }}
-
-                    </h2>
+                    <i class="fa-solid fa-clock"></i>
 
                 </div>
+
+                <h6>Pending</h6>
+
+                <h2>{{ pending }}</h2>
 
             </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow text-center">
+            <div class="dashboard-card card-green">
 
-                <div class="card-body">
+                <div class="dashboard-icon">
 
-                    <h6>Paid</h6>
-
-                    <h2 class="text-success">
-
-                        {{ paid }}
-
-                    </h2>
+                    <i class="fa-solid fa-circle-check"></i>
 
                 </div>
+
+                <h6>Paid</h6>
+
+                <h2>{{ paid }}</h2>
 
             </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-xl-3 col-md-6">
 
-            <div class="card shadow text-center">
+            <div class="dashboard-card card-purple">
 
-                <div class="card-body">
+                <div class="dashboard-icon">
 
-                    <h6>Total Fine</h6>
-
-                    <h2 class="text-danger">
-
-                        ₹ {{ total_fine }}
-
-                    </h2>
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
 
                 </div>
+
+                <h6>Total Fine</h6>
+
+                <h2>₹ {{ total_fine }}</h2>
 
             </div>
 
@@ -159,13 +176,15 @@
 
     <!-- Report Table -->
 
-    <div class="card shadow">
+    <div class="card shadow-lg border-0 rounded-4">
 
         <div class="card-header bg-success text-white">
 
             <h5 class="mb-0">
 
-                Monthly Violations
+                <i class="fa-solid fa-table me-2"></i>
+
+                Monthly Violation Records
 
             </h5>
 
@@ -173,9 +192,9 @@
 
         <div class="card-body table-responsive">
 
-            <table class="table table-bordered table-hover">
+            <table class="table table-hover align-middle">
 
-                <thead class="table-dark">
+                <thead class="table-light">
 
                     <tr>
 
@@ -203,13 +222,13 @@
 
                 <tbody>
 
-                {% for violation in violations %}
+                    {% for violation in violations %}
 
                     <tr>
 
                         <td>{{ forloop.counter }}</td>
 
-                        <td>{{ violation.vehicle_number }}</td>
+                        <td><strong>{{ violation.vehicle_number }}</strong></td>
 
                         <td>{{ violation.owner_name }}</td>
 
@@ -217,13 +236,15 @@
 
                         <td>{{ violation.location }}</td>
 
-                        <td>₹ {{ violation.fine_amount }}</td>
+                        <td><strong>₹ {{ violation.fine_amount }}</strong></td>
 
                         <td>
 
                             {% if violation.status == "Paid" %}
 
-                                <span class="badge bg-success">
+                                <span class="badge rounded-pill bg-success px-3">
+
+                                    <i class="fa-solid fa-circle-check me-1"></i>
 
                                     Paid
 
@@ -231,7 +252,9 @@
 
                             {% else %}
 
-                                <span class="badge bg-warning text-dark">
+                                <span class="badge rounded-pill bg-warning text-dark px-3">
+
+                                    <i class="fa-solid fa-clock me-1"></i>
 
                                     Pending
 
@@ -247,19 +270,31 @@
 
                     </tr>
 
-                {% empty %}
+                    {% empty %}
 
                     <tr>
 
-                        <td colspan="9" class="text-center">
+                        <td colspan="9">
 
-                            No records found.
+                            <div class="text-center py-5">
+
+                                <i class="fa-solid fa-folder-open fa-4x text-secondary mb-3"></i>
+
+                                <h5>No Records Found</h5>
+
+                                <p class="text-muted">
+
+                                    There are no traffic violations for the selected month.
+
+                                </p>
+
+                            </div>
 
                         </td>
 
                     </tr>
 
-                {% endfor %}
+                    {% endfor %}
 
                 </tbody>
 
@@ -271,11 +306,11 @@
 
     <!-- Export -->
 
-    <div class="text-end mt-4">
+    <div class="d-flex justify-content-end gap-2 mt-4 flex-wrap">
 
         <a href="{% url 'export_csv' %}" class="btn btn-success">
 
-            <i class="fa-solid fa-file-csv"></i>
+            <i class="fa-solid fa-file-csv me-2"></i>
 
             Export CSV
 
@@ -283,7 +318,7 @@
 
         <a href="{% url 'export_pdf' %}" class="btn btn-danger">
 
-            <i class="fa-solid fa-file-pdf"></i>
+            <i class="fa-solid fa-file-pdf me-2"></i>
 
             Export PDF
 

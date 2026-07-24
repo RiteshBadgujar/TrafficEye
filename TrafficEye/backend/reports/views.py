@@ -1,34 +1,40 @@
 from django.shortcuts import redirect, render
-from database.mongodb import violations_collection
 from datetime import datetime
 import csv
 from django.http import HttpResponse
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from database.violation_service import (
+    get_all_violations,
+    get_total_violations,
+    get_pending_fines,
+    get_paid_fines,
+    get_total_collection,
+    search_vehicle_report,
+    search_officer_report,
+    get_pending_violations,
+    get_paid_violations,
+    get_daily_report
+)
 
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Table,
+    TableStyle,
+    Paragraph,
+)
 def report_dashboard(request):
     
     if "user_id" not in request.session:
         return redirect("login")
 
-    total_violations = violations_collection.count_documents({})
+    total_violations = get_total_violations()
 
-    pending_fines = violations_collection.count_documents({
-        "status": "Pending"
-    })
+    pending_fines = get_pending_fines()
 
-    paid_fines = violations_collection.count_documents({
-        "status": "Paid"
-    })
+    paid_fines = get_paid_fines()
 
-    total_collection = 0
-
-    paid_records = violations_collection.find({
-        "status": "Paid"
-    })
-
-    for record in paid_records:
-        total_collection += int(record["fine_amount"])
+    total_collection = get_total_collection()
 
     context = {
 
@@ -53,11 +59,7 @@ def daily_report(request):
 
     today = datetime.now().strftime("%Y-%m-%d")
 
-    violations = list(
-        violations_collection.find({
-            "date": today
-        })
-    )
+    violations = get_daily_report(today)
 
     total_collection = 0
 
@@ -65,9 +67,10 @@ def daily_report(request):
 
         violation["id"] = str(violation["_id"])
 
-        if violation["status"] == "Paid":
-            total_collection += int(violation["fine_amount"])
-
+        if violation.get("status") == "Paid":
+            total_collection += int(
+                violation.get("fine_amount", 0)
+)
     context = {
 
         "today": today,
@@ -90,14 +93,14 @@ def monthly_report(request):
 
     current_month = datetime.now().strftime("%m-%Y")
 
-    violations = list(violations_collection.find())
+    violations = get_all_violations()
 
     monthly_violations = []
     total_collection = 0
 
     for violation in violations:
 
-        date_parts = violation["date"].split("-")
+        date_parts = violation.get("date", "").split("-")
 
         if len(date_parts) == 3:
 
@@ -108,7 +111,7 @@ def monthly_report(request):
                 violation["id"] = str(violation["_id"])
                 monthly_violations.append(violation)
 
-                if violation["status"] == "Paid":
+                if violation.get("status") == "Paid":
                     total_collection += int(violation["fine_amount"])
 
     return render(
@@ -129,14 +132,14 @@ def yearly_report(request):
 
     current_year = datetime.now().strftime("%Y")
 
-    violations = list(violations_collection.find())
+    violations = get_all_violations()
 
     yearly_data = []
     total_collection = 0
 
     for violation in violations:
 
-        date_parts = violation["date"].split("-")
+        date_parts = violation.get("date", "").split("-")
 
         if len(date_parts) == 3:
 
@@ -147,7 +150,7 @@ def yearly_report(request):
                 violation["id"] = str(violation["_id"])
                 yearly_data.append(violation)
 
-                if violation["status"] == "Paid":
+                if violation.get("status") == "Paid":
                     total_collection += int(violation["fine_amount"])
 
     return render(
@@ -166,26 +169,19 @@ def vehicle_report(request):
     if "user_id" not in request.session:
         return redirect("login")
 
-    vehicle_number = request.GET.get("vehicle_number")
+    vehicle_number = (
+        request.GET.get("vehicle_number") or ""
+    ).strip().upper()
 
     violations = []
 
     if vehicle_number:
 
-        violations = list(
-            violations_collection.find(
-                {
-                    "vehicle_number": {
-                        "$regex": vehicle_number.upper(),
-                        "$options": "i"
-                    }
-                }
-            )
-        )
+        violations = search_vehicle_report(vehicle_number)
 
         for violation in violations:
             violation["id"] = str(violation["_id"])
-
+            
     return render(
         request,
         "reports/vehicle_report.html",
@@ -201,22 +197,15 @@ def officer_report(request):
     if "user_id" not in request.session:
         return redirect("login")    
 
-    officer_name = request.GET.get("officer_name")
-
+    officer_name = (
+        request.GET.get("officer_name") or ""
+    ).strip()
+    
     violations = []
 
     if officer_name:
 
-        violations = list(
-            violations_collection.find(
-                {
-                    "officer_name": {
-                        "$regex": officer_name,
-                        "$options": "i"
-                    }
-                }
-            )
-        )
+        violations = search_officer_report(officer_name)
 
         for violation in violations:
             violation["id"] = str(violation["_id"])
@@ -236,13 +225,7 @@ def pending_report(request):
     if "user_id" not in request.session:
         return redirect("login")
 
-    violations = list(
-        violations_collection.find(
-            {
-                "status": "Pending"
-            }
-        )
-    )
+    violations = get_pending_violations()
 
     for violation in violations:
         violation["id"] = str(violation["_id"])
@@ -262,13 +245,7 @@ def paid_report(request):
     if "user_id" not in request.session:
         return redirect("login")
 
-    violations = list(
-        violations_collection.find(
-            {
-                "status": "Paid"
-            }
-        )
-    )
+    violations = get_paid_violations()
 
     total_collection = 0
 
@@ -276,7 +253,9 @@ def paid_report(request):
 
         violation["id"] = str(violation["_id"])
 
-        total_collection += int(violation["fine_amount"])
+        total_collection += int(
+            violation.get("fine_amount", 0)
+    )
 
     return render(
         request,
@@ -285,7 +264,7 @@ def paid_report(request):
             "violations": violations,
             "total_collection": total_collection
         }
-    )
+)
     
     # Export all violations to CSV
 def export_csv(request):
@@ -311,7 +290,7 @@ def export_csv(request):
         "Date"
     ])
 
-    violations = violations_collection.find()
+    violations = get_all_violations()
 
     for violation in violations:
 
@@ -334,71 +313,83 @@ def export_pdf(request):
         return redirect("login")
 
     response = HttpResponse(content_type="application/pdf")
-
     response["Content-Disposition"] = (
         'attachment; filename="traffic_report.pdf"'
     )
 
-    pdf = SimpleDocTemplate(response)
+    pdf = SimpleDocTemplate(response)  # type: ignore[arg-type]
 
-    data = [
+    # Table Header
+    data = [[
+        "Vehicle",
+        "Owner",
+        "Violation",
+        "Officer",
+        "Fine",
+        "Status",
+        "Date"
+    ]]
 
-        [
-            "Vehicle",
-            "Owner",
-            "Violation",
-            "Officer",
-            "Fine",
-            "Status",
-            "Date"
-        ]
-
-    ]
-
-    violations = violations_collection.find()
+    # Fetch all violations
+    violations = get_all_violations()
 
     for violation in violations:
-
         data.append([
-
             violation.get("vehicle_number"),
-
             violation.get("owner_name"),
-
             violation.get("violation_type"),
-
             violation.get("officer_name"),
-
             str(violation.get("fine_amount")),
-
             violation.get("status"),
-
             violation.get("date")
-
         ])
 
-    table = Table(data)
-
-    table.setStyle(
-
-        TableStyle([
-
-            ("BACKGROUND", (0,0), (-1,0), colors.grey),
-
-            ("TEXTCOLOR", (0,0), (-1,0), colors.whitesmoke),
-
-            ("GRID", (0,0), (-1,-1), 1, colors.black),
-
-            ("BACKGROUND", (0,1), (-1,-1), colors.beige),
-
-            ("ALIGN", (0,0), (-1,-1), "CENTER"),
-
-            ("BOTTOMPADDING", (0,0), (-1,0), 10)
-
-        ])
-
+    # Create table
+    table = Table(
+        data,
+        colWidths=[80, 80, 90, 80, 50, 60, 70]
     )
 
-    pdf.build([table])
+    # Table Style
+    table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+            ("GRID", (0, 0), (-1, -1), 1, colors.black),
+            ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+        ])
+    )
+
+    # PDF Content
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(
+        Paragraph("<b>TrafficEye</b>", styles["Title"])
+    )
+
+    elements.append(
+        Paragraph("Traffic Violation Report", styles["Heading2"])
+    )
+
+    elements.append(
+        Paragraph(
+            f"Generated On: {datetime.now().strftime('%d-%m-%Y')}",
+            styles["Normal"]
+        )
+    )
+
+    elements.append(table)
+
+    elements.append(
+        Paragraph(
+            f"<br/><b>Total Violations:</b> {len(data) - 1}",
+            styles["Normal"]
+        )
+    )
+
+    pdf.build(elements)
 
     return response

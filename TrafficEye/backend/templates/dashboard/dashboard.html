@@ -7,81 +7,230 @@
 <div class="container-fluid">
 
     <!-- Dashboard Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">
-            <i class="fa-solid fa-gauge-high text-primary"></i>
-            Dashboard
-        </h2>
+    <div class="dashboard-header mb-4">
 
-        <a href="{% url 'add_violation' %}" class="btn btn-primary">
-            <i class="fa-solid fa-plus"></i>
-            Add Violation
-        </a>
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="fa-solid fa-gauge-high text-primary me-2"></i>
+
+                Dashboard
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Welcome to the TrafficEye Traffic Violation Management System
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <a href="{% url 'add_violation' %}" class="btn btn-primary">
+
+                <i class="fa-solid fa-circle-plus me-2"></i>
+
+                Add Violation
+
+            </a>
+
+        </div>
+
     </div>
 
-    <!-- Statistics Cards -->
+    <!-- Statistics -->
+
     <div class="row">
 
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-primary text-white shadow dashboard-card">
-                <div class="card-body text-center">
-                    <h5>Total Violations</h5>
-                    <h2>{{ total_violations }}</h2>
+        <div class="col-xl-3 col-md-6 mb-4">
+
+            <div class="dashboard-card card-blue p-4">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-car-side"></i>
+
                 </div>
+
+                <h6 class="stat-title">Total Violations</h6>
+
+                <h2 class="stat-number">{{ total_violations }}</h2>
+
             </div>
+
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-success text-white shadow dashboard-card">
-                <div class="card-body text-center">
-                    <h5>Paid Cases</h5>
-                    <h2>{{ paid_cases }}</h2>
+        <div class="col-xl-3 col-md-6 mb-4">
+
+            <div class="dashboard-card card-green p-4">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
                 </div>
+
+                <h6 class="stat-title">Paid Cases</h6>
+
+                <h2 class="stat-number">{{ paid_cases }}</h2>
+
             </div>
+
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-warning shadow dashboard-card">
-                <div class="card-body text-center">
-                    <h5>Pending Cases</h5>
-                    <h2>{{ pending_cases }}</h2>
+        <div class="col-xl-3 col-md-6 mb-4">
+
+            <div class="dashboard-card card-orange p-4">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-clock"></i>
+
                 </div>
+
+                <h6 class="stat-title">Pending Cases</h6>
+
+                <h2 class="stat-number">{{ pending_cases }}</h2>
+
             </div>
+
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card bg-danger text-white shadow dashboard-card">
-                <div class="card-body text-center">
-                    <h5>Total Fine</h5>
-                    <h2>₹ {{ total_fine }}</h2>
+        <div class="col-xl-3 col-md-6 mb-4">
+
+            <div class="dashboard-card card-purple p-4">
+
+                <div class="dashboard-icon">
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+
                 </div>
+
+                <h6 class="stat-title">Total Fine</h6>
+
+                <h2 class="stat-number">₹ {{ total_fine }}</h2>
+
             </div>
+
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+
+            <i class="fa-solid fa-bolt text-warning me-2"></i>
+
+            Quick Actions
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row text-center">
+
+                <div class="col-md-3 mb-3">
+
+                    <a href="{% url 'add_violation' %}" class="btn btn-primary w-100 dashboard-btn">
+
+                        <i class="fa-solid fa-circle-plus me-2"></i>
+
+                        Add Violation
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <a href="{% url 'violation_list' %}" class="btn btn-success w-100 dashboard-btn">
+
+                        <i class="fa-solid fa-list me-2"></i>
+
+                        Violation List
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <a href="{% url 'search_vehicle' %}" class="btn btn-warning w-100 dashboard-btn">
+
+                        <i class="fa-solid fa-magnifying-glass me-2"></i>
+
+                        Search Vehicle
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <a href="{% url 'report_dashboard' %}" class="btn btn-danger w-100 dashboard-btn">
+
+                        <i class="fa-solid fa-chart-column me-2"></i>
+
+                        Reports
+
+                    </a>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
     <!-- Recent Violations -->
-    <div class="card shadow mb-4">
 
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">
-                <i class="fa-solid fa-car-side"></i>
+    <div class="card mb-4">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+
+            <span>
+
+                <i class="fa-solid fa-car-side text-primary me-2"></i>
+
                 Recent Violations
-            </h5>
+
+            </span>
+
+            <a href="{% url 'violation_list' %}" class="btn btn-sm btn-outline-primary">
+
+                View All
+
+            </a>
+
         </div>
 
         <div class="card-body table-responsive">
 
-            <table class="table table-hover table-bordered align-middle">
+            <table class="table table-hover align-middle">
 
-                <thead class="table-dark">
+                <thead>
+
                     <tr>
+
                         <th>Vehicle</th>
+
                         <th>Owner</th>
+
                         <th>Violation</th>
+
                         <th>Fine</th>
+
                         <th>Status</th>
+
                     </tr>
+
                 </thead>
 
                 <tbody>
@@ -103,13 +252,17 @@
                             {% if violation.status == "Paid" %}
 
                                 <span class="badge bg-success">
+
                                     Paid
+
                                 </span>
 
                             {% else %}
 
                                 <span class="badge bg-warning text-dark">
+
                                     Pending
+
                                 </span>
 
                             {% endif %}
@@ -122,9 +275,13 @@
 
                     <tr>
 
-                        <td colspan="5" class="text-center">
+                        <td colspan="5" class="text-center py-5">
 
-                            No violations available.
+                            <i class="fa-solid fa-folder-open fa-3x text-secondary mb-3"></i>
+
+                            <br>
+
+                            No violations found.
 
                         </td>
 
@@ -140,69 +297,21 @@
 
     </div>
 
-    <!-- Charts Row 1 -->
-    <div class="row mt-4">
+    <!-- Charts -->
 
-        <div class="col-lg-6 mb-4">
-
-            <div class="card chart-card shadow">
-
-                <div class="card-header bg-primary text-white">
-
-                    Monthly Violations
-
-                </div>
-
-                <div class="card-body">
-
-                    <canvas id="monthlyChart"></canvas>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-6 mb-4">
-
-            <div class="card chart-card shadow">
-
-                <div class="card-header bg-success text-white">
-
-                    Paid vs Pending
-
-                </div>
-
-                <div class="card-body">
-
-                    <canvas id="statusChart"></canvas>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Charts Row 2 -->
     <div class="row">
 
         <div class="col-lg-6 mb-4">
 
-            <div class="card chart-card shadow">
+            <div class="chart-card">
 
-                <div class="card-header bg-warning">
+                <h5 class="mb-3">
 
-                    Violation Categories
+                    Monthly Violations
 
-                </div>
+                </h5>
 
-                <div class="card-body">
-
-                    <canvas id="violationChart"></canvas>
-
-                </div>
+                <canvas id="monthlyChart"></canvas>
 
             </div>
 
@@ -210,19 +319,47 @@
 
         <div class="col-lg-6 mb-4">
 
-            <div class="card chart-card shadow">
+            <div class="chart-card">
 
-                <div class="card-header bg-danger text-white">
+                <h5 class="mb-3">
+
+                    Paid vs Pending
+
+                </h5>
+
+                <canvas id="statusChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="chart-card">
+
+                <h5 class="mb-3">
+
+                    Violation Categories
+
+                </h5>
+
+                <canvas id="violationChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="chart-card">
+
+                <h5 class="mb-3">
 
                     Yearly Trend
 
-                </div>
+                </h5>
 
-                <div class="card-body">
-
-                    <canvas id="yearlyChart"></canvas>
-
-                </div>
+                <canvas id="yearlyChart"></canvas>
 
             </div>
 

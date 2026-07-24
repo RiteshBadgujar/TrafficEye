@@ -1,5 +1,5 @@
 from database.mongodb import users_collection
-
+from bson import ObjectId
 
 def register_user(user):
     """
@@ -22,7 +22,7 @@ def get_user_by_id(user_id):
     Find user by ID
     """
     return users_collection.find_one({
-        "_id": user_id
+        "_id": ObjectId(user_id)
     })
 
 

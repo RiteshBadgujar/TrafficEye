@@ -7,122 +7,164 @@
 <div class="container-fluid">
 
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-        <h2 class="fw-bold">
-            <i class="fa-solid fa-road text-primary"></i>
-            Traffic Violations
-        </h2>
+        <div>
+            <h2 class="fw-bold">
+                <i class="fa-solid fa-road text-primary me-2"></i>
+                Traffic Violations
+            </h2>
 
-        <a href="{% url 'add_violation' %}" class="btn btn-primary">
-            <i class="fa-solid fa-plus"></i>
-            Add Violation
-        </a>
+            <p class="text-muted mb-0">
+                Manage, search, update and export all traffic violation records.
+            </p>
+        </div>
+
+        <div class="mt-2 mt-md-0">
+            <a href="{% url 'add_violation' %}" class="btn btn-primary shadow-sm">
+                <i class="fa-solid fa-circle-plus me-2"></i>
+                Add Violation
+            </a>
+        </div>
 
     </div>
 
-    <!-- Search & Filter -->
-    <div class="card shadow-sm mb-4">
+    <!-- Search Card -->
+
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
 
         <div class="card-body">
 
-            <form method="GET" class="row g-3">
+            <form method="GET">
 
-                <div class="col-md-3">
+                <div class="row g-3 align-items-end">
 
-                    <input
-                        type="text"
-                        name="search"
-                        class="form-control"
-                        placeholder="Vehicle Number / Owner Name"
-                        value="{{ search }}">
+                    <div class="col-lg-3">
 
-                </div>
+                        <label class="form-label fw-semibold">
 
-                <div class="col-md-2">
+                            <i class="fa-solid fa-magnifying-glass me-1"></i>
 
-                    <select
-                        name="status"
-                        class="form-select">
+                            Search
 
-                        <option value="">All Status</option>
+                        </label>
 
-                        <option value="Paid"
+                        <input
+                            type="text"
+                            name="search"
+                            class="form-control"
+                            placeholder="Vehicle / Owner"
+                            value="{{ search }}">
+
+                    </div>
+
+                    <div class="col-lg-2">
+
+                        <label class="form-label fw-semibold">
+
+                            Status
+
+                        </label>
+
+                        <select
+                            name="status"
+                            class="form-select">
+
+                            <option value="">All</option>
+
+                            <option value="Paid"
                             {% if status == "Paid" %}selected{% endif %}>
-                            Paid
-                        </option>
+                                Paid
+                            </option>
 
-                        <option value="Pending"
+                            <option value="Pending"
                             {% if status == "Pending" %}selected{% endif %}>
-                            Pending
-                        </option>
+                                Pending
+                            </option>
 
-                    </select>
+                        </select>
 
-                </div>
+                    </div>
 
-                <div class="col-md-2">
+                    <div class="col-lg-2">
 
-                    <input
-                        type="text"
-                        name="type"
-                        class="form-control"
-                        placeholder="Violation Type"
-                        value="{{ violation_type }}">
+                        <label class="form-label fw-semibold">
 
-                </div>
+                            Violation
 
-                <div class="col-md-2">
+                        </label>
 
-                    <select
-                        name="sort"
-                        class="form-select">
+                        <input
+                            type="text"
+                            name="type"
+                            class="form-control"
+                            placeholder="Violation Type"
+                            value="{{ violation_type }}">
 
-                        <option value="newest"
+                    </div>
+
+                    <div class="col-lg-2">
+
+                        <label class="form-label fw-semibold">
+
+                            Sort
+
+                        </label>
+
+                        <select
+                            name="sort"
+                            class="form-select">
+
+                            <option value="newest"
                             {% if sort == "newest" %}selected{% endif %}>
-                            Newest
-                        </option>
+                                Newest
+                            </option>
 
-                        <option value="oldest"
+                            <option value="oldest"
                             {% if sort == "oldest" %}selected{% endif %}>
-                            Oldest
-                        </option>
+                                Oldest
+                            </option>
 
-                    </select>
+                        </select>
 
-                </div>
+                    </div>
 
-                <div class="col-md-3 text-end">
+                    <div class="col-lg-3">
 
-                    <button
-                        type="submit"
-                        class="btn btn-success">
+                        <div class="d-flex gap-2 flex-wrap">
 
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                            <button
+                                class="btn btn-success">
 
-                        Search
+                                <i class="fa-solid fa-filter me-1"></i>
 
-                    </button>
+                                Search
 
-                    <a
-                        href="{% url 'export_csv' %}?search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}"
-                        class="btn btn-outline-success">
+                            </button>
 
-                        <i class="fa-solid fa-file-csv"></i>
+                            <a
+                                href="{% url 'export_csv' %}?search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}"
+                                class="btn btn-outline-success">
 
-                        CSV
+                                <i class="fa-solid fa-file-csv me-1"></i>
 
-                    </a>
+                                CSV
 
-                    <a
-                        href="{% url 'export_pdf' %}?search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}"
-                        class="btn btn-outline-danger">
+                            </a>
 
-                        <i class="fa-solid fa-file-pdf"></i>
+                            <a
+                                href="{% url 'export_pdf' %}?search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}"
+                                class="btn btn-outline-danger">
 
-                        PDF
+                                <i class="fa-solid fa-file-pdf me-1"></i>
 
-                    </a>
+                                PDF
+
+                            </a>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -132,13 +174,15 @@
 
     </div>
 
-    <!-- Violation Table -->
+    <!-- Table -->
 
-    <div class="card shadow">
+    <div class="card shadow-lg border-0 rounded-4">
 
-        <div class="card-header bg-dark text-white">
+        <div class="card-header bg-primary text-white">
 
             <h5 class="mb-0">
+
+                <i class="fa-solid fa-table me-2"></i>
 
                 Violation Records
 
@@ -148,17 +192,17 @@
 
         <div class="card-body table-responsive">
 
-            <table class="table table-hover table-bordered align-middle">
+            <table class="table table-hover align-middle">
 
-                <thead class="table-dark">
+                <thead class="table-light">
 
                     <tr>
 
                         <th>#</th>
 
-                        <th>Vehicle Number</th>
+                        <th>Vehicle</th>
 
-                        <th>Owner Name</th>
+                        <th>Owner</th>
 
                         <th>Violation</th>
 
@@ -168,11 +212,7 @@
 
                         <th>Status</th>
 
-                        <th width="220">
-
-                            Actions
-
-                        </th>
+                        <th class="text-center">Actions</th>
 
                     </tr>
 
@@ -192,7 +232,11 @@
 
                         <td>
 
-                            {{ violation.vehicle_number }}
+                            <strong>
+
+                                {{ violation.vehicle_number }}
+
+                            </strong>
 
                         </td>
 
@@ -216,7 +260,11 @@
 
                         <td>
 
-                            ₹ {{ violation.fine_amount }}
+                            <strong>
+
+                                ₹ {{ violation.fine_amount }}
+
+                            </strong>
 
                         </td>
 
@@ -224,7 +272,7 @@
 
                             {% if violation.status == "Paid" %}
 
-                                <span class="badge bg-success">
+                                <span class="badge rounded-pill bg-success px-3">
 
                                     Paid
 
@@ -232,7 +280,7 @@
 
                             {% else %}
 
-                                <span class="badge bg-warning text-dark">
+                                <span class="badge rounded-pill bg-warning text-dark px-3">
 
                                     Pending
 
@@ -242,11 +290,12 @@
 
                         </td>
 
-                        <td>
+                        <td class="text-center">
 
                             <a
                                 href="{% url 'edit_violation' violation.id %}"
-                                class="btn btn-warning btn-sm">
+                                class="btn btn-warning btn-sm"
+                                title="Edit">
 
                                 <i class="fa-solid fa-pen"></i>
 
@@ -254,21 +303,27 @@
 
                             {% if violation.status == "Pending" %}
 
-                                <a
-                                    href="{% url 'pay_fine' violation.id %}"
-                                    class="btn btn-success btn-sm">
+                            <a
+                                href="{% url 'pay_fine' violation.id %}"
+                                class="btn btn-success btn-sm"
+                                title="Pay">
 
-                                    <i class="fa-solid fa-money-bill"></i>
+                                <i class="fa-solid fa-money-bill-wave"></i>
 
-                                </a>
+                            </a>
 
                             {% endif %}
 
-                            <form method="POST" action="{% url 'delete_violation' violation.id %}" style="display:inline;">
+                            <form
+                                method="POST"
+                                action="{% url 'delete_violation' violation.id %}"
+                                class="d-inline">
 
                                 {% csrf_token %}
 
-                                <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Delete this violation?');">
+                                <button
+                                    class="btn btn-danger btn-sm delete-btn"
+                                    onclick="return confirm('Delete this violation?')">
 
                                     <i class="fa-solid fa-trash"></i>
 
@@ -284,11 +339,35 @@
 
                     <tr>
 
-                        <td
-                            colspan="8"
-                            class="text-center">
+                        <td colspan="8">
 
-                            No violation records found.
+                            <div class="text-center py-5">
+
+                                <i class="fa-solid fa-folder-open fa-4x text-secondary mb-3"></i>
+
+                                <h5>
+
+                                    No Violation Records Found
+
+                                </h5>
+
+                                <p class="text-muted">
+
+                                    Try another search or add a new violation.
+
+                                </p>
+
+                                <a
+                                    href="{% url 'add_violation' %}"
+                                    class="btn btn-primary">
+
+                                    <i class="fa-solid fa-circle-plus me-2"></i>
+
+                                    Add Violation
+
+                                </a>
+
+                            </div>
 
                         </td>
 
@@ -316,9 +395,8 @@
 
             <li class="page-item">
 
-                <a
-                    class="page-link"
-                    href="?page={{ page_obj.previous_page_number }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
+                <a class="page-link"
+                href="?page={{ page_obj.previous_page_number }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
 
                     Previous
 
@@ -330,11 +408,10 @@
 
             {% for page in page_obj.paginator.page_range %}
 
-            <li class="page-item {% if page_obj.number == page %}active{% endif %}">
+            <li class="page-item {% if page == page_obj.number %}active{% endif %}">
 
-                <a
-                    class="page-link"
-                    href="?page={{ page }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
+                <a class="page-link"
+                href="?page={{ page }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
 
                     {{ page }}
 
@@ -348,9 +425,8 @@
 
             <li class="page-item">
 
-                <a
-                    class="page-link"
-                    href="?page={{ page_obj.next_page_number }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
+                <a class="page-link"
+                href="?page={{ page_obj.next_page_number }}&search={{ search }}&status={{ status }}&type={{ violation_type }}&sort={{ sort }}">
 
                     Next
 

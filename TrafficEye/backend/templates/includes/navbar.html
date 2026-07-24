@@ -1,87 +1,187 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+
     <div class="container-fluid">
 
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">
-            <i class="fa-solid fa-shield-halved text-warning"></i>
-            TrafficEye
+        <!-- Brand Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard' %}">
+            <i class="fa-solid fa-shield-halved text-warning fs-2 me-2"></i>
+
+            <div>
+                <div class="fw-bold fs-4">TrafficEye</div>
+                <small class="text-light opacity-75">
+                    Traffic Violation Management System
+                </small>
+            </div>
         </a>
 
         <!-- Mobile Toggle -->
-        <button class="navbar-toggler" type="button"
+        <button class="navbar-toggler"
+                type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#navbarMenu">
+                data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+
             <span class="navbar-toggler-icon"></span>
+
         </button>
 
         <div class="collapse navbar-collapse" id="navbarMenu">
 
             <!-- Search -->
-            <form class="d-flex ms-auto me-3">
-                <input class="form-control" type="search"
-                       placeholder="Search..."
-                       aria-label="Search">
+            <form class="d-flex ms-auto me-4 w-50">
+
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white">
+
+                        <i class="fa-solid fa-magnifying-glass text-primary"></i>
+
+                    </span>
+
+                    <input
+                        type="search"
+                        class="form-control"
+                        placeholder="Search Vehicle / Owner..."
+                        aria-label="Search">
+
+                </div>
+
             </form>
 
             <!-- Notification -->
             <ul class="navbar-nav me-3">
-                <li class="nav-item">
+
+                <li class="nav-item notification">
+
                     <a class="nav-link position-relative" href="#">
+
                         <i class="fa-solid fa-bell fa-lg"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
                             3
+
                         </span>
+
                     </a>
+
                 </li>
+
             </ul>
 
             <!-- User Dropdown -->
             <div class="dropdown">
-                <button class="btn btn-outline-light dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown">
 
-                    <i class="fa-solid fa-user-circle"></i>
-                    Admin
+                <button
+                    class="btn btn-light rounded-pill shadow-sm dropdown-toggle d-flex align-items-center"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+
+                    <i class="fa-solid fa-user-circle text-primary fs-3 me-2"></i>
+
+                    <div class="text-start">
+
+                        <div class="fw-semibold">
+
+                            {% if request.session.user_name %}
+                                {{ request.session.user_name }}
+                            {% else %}
+                                Administrator
+                            {% endif %}
+
+                        </div>
+
+                        <small class="text-success">
+
+                            ● Online
+
+                        </small>
+
+                    </div>
+
                 </button>
 
-                <ul class="dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
 
                     <li>
+
                         <a class="dropdown-item" href="{% url 'profile' %}">
-                            <i class="fa-solid fa-user me-2"></i>
+
+                            <i class="fa-solid fa-user me-2 text-primary"></i>
+
                             Profile
+
                         </a>
+
                     </li>
 
                     <li>
+
                         <a class="dropdown-item" href="{% url 'settings' %}">
-                            <i class="fa-solid fa-gear me-2"></i>
+
+                            <i class="fa-solid fa-gear me-2 text-secondary"></i>
+
                             Settings
+
                         </a>
+
                     </li>
 
-                    <li><hr class="dropdown-divider"></li>
+                    <li>
+
+                        <a class="dropdown-item" href="{% url 'search_vehicle' %}">
+
+                            <i class="fa-solid fa-magnifying-glass me-2 text-success"></i>
+
+                            Search Vehicle
+
+                        </a>
+
+                    </li>
 
                     <li>
+
+                        <a class="dropdown-item" href="{% url 'report_dashboard' %}">
+
+                            <i class="fa-solid fa-chart-column me-2 text-warning"></i>
+
+                            Reports
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <hr class="dropdown-divider">
+
+                    </li>
+
+                    <li>
+
                         <a class="dropdown-item text-danger"
                            href="{% url 'logout' %}">
-                            <i class="fa-solid fa-right-from-bracket me-2"></i>
-                            Logout
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a href="{% url 'search_vehicle' %}" class="nav-link text-white">
-                            <i class="fa-solid fa-magnifying-glass me-2"></i>
-                                Search Vehicle
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+
+                            Logout
+
                         </a>
+
                     </li>
 
                 </ul>
+
             </div>
 
         </div>
 
     </div>
+
 </nav>

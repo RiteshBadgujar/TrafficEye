@@ -6,40 +6,72 @@
 
 <div class="container-fluid">
 
-    <!-- Page Title -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header -->
 
-        <h2 class="fw-bold">
-            <i class="fa-solid fa-chart-line text-primary"></i>
-            Reports Dashboard
-        </h2>
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-        <a href="{% url 'dashboard' %}" class="btn btn-secondary">
-            <i class="fa-solid fa-arrow-left"></i>
-            Dashboard
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="fa-solid fa-chart-line text-primary me-2"></i>
+
+                Reports Dashboard
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Analyze traffic violations, monitor revenue, and generate reports.
+
+            </p>
+
+        </div>
+
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">
+
+            <i class="fa-solid fa-arrow-left me-2"></i>
+
+            Back to Dashboard
+
         </a>
 
     </div>
 
-    <div class="row">
+    <!-- Report Cards -->
 
-        <!-- Daily Report -->
-        <div class="col-lg-3 col-md-6 mb-4">
+    <div class="row g-4">
 
-            <div class="card shadow border-0 h-100">
+        <!-- Daily -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-calendar-day fa-3x text-primary mb-3"></i>
+                    <div class="report-icon bg-primary">
 
-                    <h5>Daily Report</h5>
+                        <i class="fa-solid fa-calendar-day"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Daily Report
+
+                    </h5>
 
                     <p class="text-muted">
+
                         View today's traffic violations.
+
                     </p>
 
                     <a href="{% url 'daily_report' %}" class="btn btn-primary">
-                        View
+
+                        Open Report
+
                     </a>
 
                 </div>
@@ -48,23 +80,36 @@
 
         </div>
 
-        <!-- Monthly Report -->
-        <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Monthly -->
 
-            <div class="card shadow border-0 h-100">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-calendar-days fa-3x text-success mb-3"></i>
+                    <div class="report-icon bg-success">
 
-                    <h5>Monthly Report</h5>
+                        <i class="fa-solid fa-calendar-days"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Monthly Report
+
+                    </h5>
 
                     <p class="text-muted">
-                        Monthly violation analysis.
+
+                        Monthly traffic analysis.
+
                     </p>
 
                     <a href="{% url 'monthly_report' %}" class="btn btn-success">
-                        View
+
+                        Open Report
+
                     </a>
 
                 </div>
@@ -73,23 +118,36 @@
 
         </div>
 
-        <!-- Yearly Report -->
-        <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Yearly -->
 
-            <div class="card shadow border-0 h-100">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-calendar fa-3x text-warning mb-3"></i>
+                    <div class="report-icon bg-warning">
 
-                    <h5>Yearly Report</h5>
+                        <i class="fa-solid fa-calendar"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Yearly Report
+
+                    </h5>
 
                     <p class="text-muted">
-                        Annual traffic report.
+
+                        Annual performance report.
+
                     </p>
 
                     <a href="{% url 'yearly_report' %}" class="btn btn-warning">
-                        View
+
+                        Open Report
+
                     </a>
 
                 </div>
@@ -98,23 +156,36 @@
 
         </div>
 
-        <!-- Vehicle Report -->
-        <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Vehicle -->
 
-            <div class="card shadow border-0 h-100">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-car fa-3x text-danger mb-3"></i>
+                    <div class="report-icon bg-danger">
 
-                    <h5>Vehicle Report</h5>
+                        <i class="fa-solid fa-car"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Vehicle Report
+
+                    </h5>
 
                     <p class="text-muted">
-                        Search by vehicle number.
+
+                        Search vehicle violations.
+
                     </p>
 
                     <a href="{% url 'vehicle_report' %}" class="btn btn-danger">
-                        View
+
+                        Open Report
+
                     </a>
 
                 </div>
@@ -123,23 +194,36 @@
 
         </div>
 
-        <!-- Officer Report -->
-        <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Officer -->
 
-            <div class="card shadow border-0 h-100">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-user-shield fa-3x text-info mb-3"></i>
+                    <div class="report-icon bg-info">
 
-                    <h5>Officer Report</h5>
+                        <i class="fa-solid fa-user-shield"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Officer Report
+
+                    </h5>
 
                     <p class="text-muted">
-                        Officer-wise reports.
+
+                        Officer-wise violation statistics.
+
                     </p>
 
                     <a href="{% url 'officer_report' %}" class="btn btn-info">
-                        View
+
+                        Open Report
+
                     </a>
 
                 </div>
@@ -148,23 +232,36 @@
 
         </div>
 
-        <!-- Pending Report -->
-        <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Pending -->
 
-            <div class="card shadow border-0 h-100">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-clock fa-3x text-secondary mb-3"></i>
+                    <div class="report-icon bg-secondary">
 
-                    <h5>Pending Report</h5>
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Pending Report
+
+                    </h5>
 
                     <p class="text-muted">
-                        View pending fines.
+
+                        View all pending fine payments.
+
                     </p>
 
                     <a href="{% url 'pending_report' %}" class="btn btn-secondary">
-                        View
+
+                        Open Report
+
                     </a>
 
                 </div>
@@ -173,23 +270,36 @@
 
         </div>
 
-        <!-- Paid Report -->
-        <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Paid -->
 
-            <div class="card shadow border-0 h-100">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-circle-check fa-3x text-success mb-3"></i>
+                    <div class="report-icon bg-success">
 
-                    <h5>Paid Report</h5>
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Paid Report
+
+                    </h5>
 
                     <p class="text-muted">
-                        View paid violations.
+
+                        Review completed fine payments.
+
                     </p>
 
                     <a href="{% url 'paid_report' %}" class="btn btn-success">
-                        View
+
+                        Open Report
+
                     </a>
 
                 </div>
@@ -198,28 +308,51 @@
 
         </div>
 
-        <!-- Export Reports -->
-        <div class="col-lg-3 col-md-6 mb-4">
+        <!-- Export -->
 
-            <div class="card shadow border-0 h-100">
+        <div class="col-xl-3 col-md-6">
+
+            <div class="report-card card border-0 shadow-lg h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="fa-solid fa-file-export fa-3x text-dark mb-3"></i>
+                    <div class="report-icon bg-dark">
 
-                    <h5>Export Reports</h5>
+                        <i class="fa-solid fa-file-export"></i>
+
+                    </div>
+
+                    <h5 class="mt-3">
+
+                        Export Reports
+
+                    </h5>
 
                     <p class="text-muted">
-                        Download CSV & PDF reports.
+
+                        Download reports in CSV or PDF format.
+
                     </p>
 
-                    <a href="{% url 'export_csv' %}" class="btn btn-outline-success mb-2">
-                        CSV
-                    </a>
+                    <div class="d-grid gap-2">
 
-                    <a href="{% url 'export_pdf' %}" class="btn btn-outline-danger">
-                        PDF
-                    </a>
+                        <a href="{% url 'export_csv' %}" class="btn btn-outline-success">
+
+                            <i class="fa-solid fa-file-csv me-2"></i>
+
+                            Export CSV
+
+                        </a>
+
+                        <a href="{% url 'export_pdf' %}" class="btn btn-outline-danger">
+
+                            <i class="fa-solid fa-file-pdf me-2"></i>
+
+                            Export PDF
+
+                        </a>
+
+                    </div>
 
                 </div>
 

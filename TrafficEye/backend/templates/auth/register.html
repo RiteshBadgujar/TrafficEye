@@ -4,102 +4,246 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
 
-    <div class="row justify-content-center mt-5">
+    <div class="row min-vh-100 align-items-center">
+
+        <!-- Left Side -->
+
+        <div class="col-lg-6 d-none d-lg-flex bg-success text-white justify-content-center align-items-center">
+
+            <div class="text-center px-5">
+
+                <i class="fa-solid fa-user-shield fa-6x text-warning mb-4"></i>
+
+                <h1 class="fw-bold mb-3">
+
+                    Join TrafficEye
+
+                </h1>
+
+                <p class="lead">
+
+                    Smart Traffic Violation Management System
+
+                </p>
+
+                <p>
+
+                    Create your account to securely manage traffic violations,
+                    generate reports, search vehicles, and access the complete dashboard.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- Register Form -->
 
         <div class="col-lg-6">
 
-            <div class="card shadow-lg border-0">
+            <div class="d-flex justify-content-center align-items-center">
 
-                <div class="card-header bg-success text-white text-center">
+                <div class="card shadow-lg border-0 rounded-4 p-4 register-card">
 
-                    <h3>
+                    <div class="text-center mb-4">
 
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i class="fa-solid fa-user-plus fa-3x text-success mb-3"></i>
 
-                        Create Account
+                        <h2 class="fw-bold">
 
-                    </h3>
+                            Create Account
 
-                </div>
+                        </h2>
 
-                <div class="card-body">
+                        <p class="text-muted">
+
+                            Register to continue
+
+                        </p>
+
+                    </div>
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            <div class="alert alert-{{ message.tags }}">
+
+                                {{ message }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
 
                     <form method="POST">
 
                         {% csrf_token %}
 
+                        <!-- Name -->
+
                         <div class="mb-3">
 
-                            <label>Name</label>
+                            <label class="form-label">
 
-                            <input
-                                type="text"
-                                name="name"
-                                class="form-control"
-                                required>
+                                Full Name
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="fa-solid fa-user"></i>
+
+                                </span>
+
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control"
+                                    placeholder="Enter your full name"
+                                    required>
+
+                            </div>
 
                         </div>
 
+                        <!-- Email -->
+
                         <div class="mb-3">
 
-                            <label>Email</label>
+                            <label class="form-label">
 
-                            <input
-                                type="email"
-                                name="email"
-                                class="form-control"
-                                required>
+                                Email Address
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="fa-solid fa-envelope"></i>
+
+                                </span>
+
+                                <input
+                                    type="email"
+                                    name="email"
+                                    class="form-control"
+                                    placeholder="Enter your email"
+                                    required>
+
+                            </div>
 
                         </div>
 
+                        <!-- Password -->
+
                         <div class="mb-3">
 
-                            <label>Password</label>
+                            <label class="form-label">
 
-                            <input
-                                type="password"
-                                name="password"
-                                class="form-control"
-                                required>
+                                Password
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="fa-solid fa-lock"></i>
+
+                                </span>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="form-control"
+                                    placeholder="Create a password"
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    onclick="togglePassword('password','eye1')">
+
+                                    <i id="eye1" class="fa-solid fa-eye"></i>
+
+                                </button>
+
+                            </div>
 
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Confirm Password -->
 
-                            <label>Confirm Password</label>
+                        <div class="mb-4">
 
-                            <input
-                                type="password"
-                                name="confirm_password"
-                                class="form-control"
-                                required>
+                            <label class="form-label">
+
+                                Confirm Password
+
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+
+                                    <i class="fa-solid fa-lock"></i>
+
+                                </span>
+
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirm_password"
+                                    class="form-control"
+                                    placeholder="Confirm password"
+                                    required>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    onclick="togglePassword('confirmPassword','eye2')">
+
+                                    <i id="eye2" class="fa-solid fa-eye"></i>
+
+                                </button>
+
+                            </div>
 
                         </div>
 
                         <button
+                            type="submit"
                             class="btn btn-success w-100">
 
-                            <i class="fa-solid fa-user-plus"></i>
+                            <i class="fa-solid fa-user-plus me-2"></i>
 
-                            Register
+                            Create Account
 
                         </button>
 
                     </form>
 
-                </div>
+                    <hr>
 
-                <div class="card-footer text-center">
+                    <div class="text-center">
 
-                    Already Registered?
+                        Already have an account?
 
-                    <a href="{% url 'login' %}">
+                        <a href="{% url 'login' %}">
 
-                        Login
+                            Login
 
-                    </a>
+                        </a>
+
+                    </div>
 
                 </div>
 
@@ -110,5 +254,31 @@
     </div>
 
 </div>
+
+<script>
+
+function togglePassword(fieldId, iconId){
+
+    const field=document.getElementById(fieldId);
+
+    const icon=document.getElementById(iconId);
+
+    if(field.type==="password"){
+
+        field.type="text";
+
+        icon.classList.replace("fa-eye","fa-eye-slash");
+
+    }else{
+
+        field.type="password";
+
+        icon.classList.replace("fa-eye-slash","fa-eye");
+
+    }
+
+}
+
+</script>
 
 {% endblock %}

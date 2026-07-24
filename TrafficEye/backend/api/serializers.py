@@ -3,18 +3,20 @@ from rest_framework import serializers
 
 class ViolationSerializer(serializers.Serializer):
 
-    vehicle_number = serializers.CharField()
+    vehicle_number = serializers.CharField(max_length=20)
 
-    owner_name = serializers.CharField()
+    owner_name = serializers.CharField(max_length=100)
 
-    violation_type = serializers.CharField()
+    violation_type = serializers.CharField(max_length=100)
 
-    location = serializers.CharField()
+    location = serializers.CharField(max_length=100)
 
-    officer_name = serializers.CharField()
+    officer_name = serializers.CharField(max_length=100)
 
-    fine_amount = serializers.IntegerField()
+    fine_amount = serializers.IntegerField(min_value=0)
 
-    status = serializers.CharField()
+    status = serializers.ChoiceField(
+        choices=["Pending", "Paid"]
+    )
 
-    date = serializers.CharField()
+    date = serializers.DateField()

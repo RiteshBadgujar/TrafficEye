@@ -6,63 +6,110 @@
 
 <div class="container-fluid">
 
-    <!-- Page Header -->
+    <!-- Header -->
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-        <h2 class="fw-bold">
+        <div>
 
-            <i class="fa-solid fa-car text-danger"></i>
+            <h2 class="fw-bold">
 
-            Vehicle Wise Report
+                <i class="fa-solid fa-car text-danger me-2"></i>
 
-        </h2>
+                Vehicle Wise Report
 
-        <a href="{% url 'report_dashboard' %}" class="btn btn-secondary">
+            </h2>
 
-            <i class="fa-solid fa-arrow-left"></i>
+            <p class="text-muted mb-0">
 
-            Back
+                Search and analyze the complete violation history of a specific vehicle.
+
+            </p>
+
+        </div>
+
+        <a href="{% url 'report_dashboard' %}" class="btn btn-outline-danger">
+
+            <i class="fa-solid fa-arrow-left me-2"></i>
+
+            Back to Reports
 
         </a>
 
     </div>
 
-    <!-- Search Form -->
+    <!-- Search Card -->
 
-    <div class="card shadow mb-4">
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-danger text-white">
+
+            <h5 class="mb-0">
+
+                <i class="fa-solid fa-magnifying-glass me-2"></i>
+
+                Search Vehicle
+
+            </h5>
+
+        </div>
 
         <div class="card-body">
 
-            <form method="GET" class="row g-3">
+            <form method="GET">
 
-                <div class="col-md-6">
+                <div class="row align-items-end">
 
-                    <label class="form-label">
+                    <div class="col-lg-8 mb-3">
 
-                        Vehicle Number
+                        <label class="form-label fw-semibold">
 
-                    </label>
+                            Vehicle Number
 
-                    <input
-                        type="text"
-                        name="vehicle_number"
-                        class="form-control"
-                        placeholder="Example: MH15AB1234"
-                        value="{{ request.GET.vehicle_number }}">
+                        </label>
 
-                </div>
+                        <div class="input-group">
 
-                <div class="col-md-2 d-flex align-items-end">
+                            <span class="input-group-text">
 
-                    <button
-                        class="btn btn-danger w-100">
+                                <i class="fa-solid fa-car-side"></i>
 
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
 
-                        Search
+                            <input
+                                type="text"
+                                name="vehicle_number"
+                                class="form-control"
+                                placeholder="Example: MH15AB1234"
+                                value="{{ request.GET.vehicle_number }}">
 
-                    </button>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-2 mb-3">
+
+                        <button class="btn btn-danger w-100">
+
+                            <i class="fa-solid fa-magnifying-glass me-2"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                    <div class="col-lg-2 mb-3">
+
+                        <a href="{% url 'vehicle_report' %}" class="btn btn-outline-secondary w-100">
+
+                            <i class="fa-solid fa-rotate"></i>
+
+                            Reset
+
+                        </a>
+
+                    </div>
 
                 </div>
 
@@ -74,23 +121,21 @@
 
     <!-- Summary -->
 
-    <div class="row mb-4">
+    <div class="row g-4 mb-4">
 
         <div class="col-md-6">
 
-            <div class="card shadow border-0">
+            <div class="dashboard-card card-blue">
 
-                <div class="card-body text-center">
+                <div class="dashboard-icon">
 
-                    <h6>Total Violations</h6>
-
-                    <h2 class="text-primary">
-
-                        {{ total_violations }}
-
-                    </h2>
+                    <i class="fa-solid fa-car"></i>
 
                 </div>
+
+                <h6>Total Violations</h6>
+
+                <h2>{{ total_violations }}</h2>
 
             </div>
 
@@ -98,19 +143,17 @@
 
         <div class="col-md-6">
 
-            <div class="card shadow border-0">
+            <div class="dashboard-card card-purple">
 
-                <div class="card-body text-center">
+                <div class="dashboard-icon">
 
-                    <h6>Total Fine Amount</h6>
-
-                    <h2 class="text-danger">
-
-                        ₹ {{ total_fine }}
-
-                    </h2>
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
 
                 </div>
+
+                <h6>Total Fine Amount</h6>
+
+                <h2>₹ {{ total_fine }}</h2>
 
             </div>
 
@@ -118,13 +161,15 @@
 
     </div>
 
-    <!-- Vehicle Report Table -->
+    <!-- Table -->
 
-    <div class="card shadow">
+    <div class="card shadow-lg border-0 rounded-4">
 
         <div class="card-header bg-danger text-white">
 
             <h5 class="mb-0">
+
+                <i class="fa-solid fa-table me-2"></i>
 
                 Vehicle Violation History
 
@@ -134,9 +179,9 @@
 
         <div class="card-body table-responsive">
 
-            <table class="table table-bordered table-hover">
+            <table class="table table-hover align-middle">
 
-                <thead class="table-dark">
+                <thead class="table-light">
 
                     <tr>
 
@@ -156,7 +201,7 @@
 
                 <tbody>
 
-                {% for violation in violations %}
+                    {% for violation in violations %}
 
                     <tr>
 
@@ -164,7 +209,15 @@
 
                         <td>{{ violation.date }}</td>
 
-                        <td>{{ violation.vehicle_number }}</td>
+                        <td>
+
+                            <strong>
+
+                                {{ violation.vehicle_number }}
+
+                            </strong>
+
+                        </td>
 
                         <td>{{ violation.owner_name }}</td>
 
@@ -174,25 +227,37 @@
 
                         <td>{{ violation.officer_name }}</td>
 
-                        <td>₹ {{ violation.fine_amount }}</td>
+                        <td>
+
+                            <strong>
+
+                                ₹ {{ violation.fine_amount }}
+
+                            </strong>
+
+                        </td>
 
                         <td>
 
                             {% if violation.status == "Paid" %}
 
-                                <span class="badge bg-success">
+                            <span class="badge rounded-pill bg-success px-3">
 
-                                    Paid
+                                <i class="fa-solid fa-circle-check me-1"></i>
 
-                                </span>
+                                Paid
+
+                            </span>
 
                             {% else %}
 
-                                <span class="badge bg-warning text-dark">
+                            <span class="badge rounded-pill bg-warning text-dark px-3">
 
-                                    Pending
+                                <i class="fa-solid fa-clock me-1"></i>
 
-                                </span>
+                                Pending
+
+                            </span>
 
                             {% endif %}
 
@@ -200,19 +265,35 @@
 
                     </tr>
 
-                {% empty %}
+                    {% empty %}
 
                     <tr>
 
-                        <td colspan="9" class="text-center">
+                        <td colspan="9">
 
-                            No vehicle records found.
+                            <div class="text-center py-5">
+
+                                <i class="fa-solid fa-car-burst fa-4x text-secondary mb-3"></i>
+
+                                <h5>
+
+                                    No Vehicle Records Found
+
+                                </h5>
+
+                                <p class="text-muted">
+
+                                    Search using a valid vehicle number to view its violation history.
+
+                                </p>
+
+                            </div>
 
                         </td>
 
                     </tr>
 
-                {% endfor %}
+                    {% endfor %}
 
                 </tbody>
 
@@ -224,11 +305,11 @@
 
     <!-- Export -->
 
-    <div class="text-end mt-4">
+    <div class="d-flex justify-content-end gap-2 mt-4 flex-wrap">
 
         <a href="{% url 'export_csv' %}" class="btn btn-success">
 
-            <i class="fa-solid fa-file-csv"></i>
+            <i class="fa-solid fa-file-csv me-2"></i>
 
             Export CSV
 
@@ -236,7 +317,7 @@
 
         <a href="{% url 'export_pdf' %}" class="btn btn-danger">
 
-            <i class="fa-solid fa-file-pdf"></i>
+            <i class="fa-solid fa-file-pdf me-2"></i>
 
             Export PDF
 

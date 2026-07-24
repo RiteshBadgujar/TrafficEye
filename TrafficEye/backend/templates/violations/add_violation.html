@@ -6,83 +6,155 @@
 
 <div class="container-fluid">
 
+    <!-- Page Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="fa-solid fa-circle-plus text-primary me-2"></i>
+
+                Add Traffic Violation
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Record a new traffic violation into the system.
+
+            </p>
+
+        </div>
+
+        <a href="{% url 'violation_list' %}" class="btn btn-outline-primary">
+
+            <i class="fa-solid fa-list me-2"></i>
+
+            View Violations
+
+        </a>
+
+    </div>
+
     <div class="row justify-content-center">
 
-        <div class="col-lg-8">
+        <div class="col-xl-10">
 
-            <div class="card shadow border-0">
+            <div class="card shadow-lg border-0 rounded-4">
 
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-primary text-white py-3">
 
-                    <h3 class="mb-0">
-                        <i class="fa-solid fa-circle-plus"></i>
-                        Add New Traffic Violation
-                    </h3>
+                    <h4 class="mb-0">
+
+                        <i class="fa-solid fa-car-side me-2"></i>
+
+                        Violation Details
+
+                    </h4>
 
                 </div>
 
-                <div class="card-body">
+                <div class="card-body p-4">
 
                     {% if message %}
+
                         <div class="alert alert-success">
+
+                            <i class="fa-solid fa-circle-check me-2"></i>
+
                             {{ message }}
+
                         </div>
+
                     {% endif %}
 
                     <form method="POST">
 
                         {% csrf_token %}
 
+                        <!-- Vehicle Details -->
+
+                        <h5 class="text-primary mb-3">
+
+                            <i class="fa-solid fa-car me-2"></i>
+
+                            Vehicle Information
+
+                        </h5>
+
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Vehicle Number
-                                </label>
+                                <label class="form-label">Vehicle Number</label>
 
-                                <input
-                                    type="text"
-                                    name="vehicle_number"
-                                    class="form-control"
-                                    placeholder="MH15AB1234"
-                                    required>
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+
+                                        <i class="fa-solid fa-car"></i>
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        name="vehicle_number"
+                                        class="form-control"
+                                        placeholder="MH15AB1234"
+                                        required>
+
+                                </div>
 
                             </div>
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Owner Name
-                                </label>
+                                <label class="form-label">Owner Name</label>
 
-                                <input
-                                    type="text"
-                                    name="owner_name"
-                                    class="form-control"
-                                    placeholder="Enter Owner Name"
-                                    required>
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+
+                                        <i class="fa-solid fa-user"></i>
+
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        name="owner_name"
+                                        class="form-control"
+                                        placeholder="Enter Owner Name"
+                                        required>
+
+                                </div>
 
                             </div>
 
                         </div>
 
+                        <hr>
+
+                        <!-- Violation Details -->
+
+                        <h5 class="text-primary mb-3">
+
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+
+                            Violation Information
+
+                        </h5>
+
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Violation Type
-                                </label>
+                                <label class="form-label">Violation Type</label>
 
-                                <select
-                                    name="violation_type"
-                                    class="form-select"
-                                    required>
+                                <select name="violation_type" class="form-select" required>
 
-                                    <option value="">
-                                        Select Violation
-                                    </option>
+                                    <option value="">Select Violation</option>
 
                                     <option>Helmet</option>
 
@@ -104,9 +176,7 @@
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Location
-                                </label>
+                                <label class="form-label">Location</label>
 
                                 <input
                                     type="text"
@@ -121,26 +191,23 @@
 
                         <div class="row">
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
 
-                                <label class="form-label">
-                                    Fine Amount (₹)
-                                </label>
+                                <label class="form-label">Fine Amount (₹)</label>
 
                                 <input
                                     type="number"
                                     name="fine_amount"
                                     class="form-control"
                                     placeholder="500"
+                                    min="0"
                                     required>
 
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
 
-                                <label class="form-label">
-                                    Officer Name
-                                </label>
+                                <label class="form-label">Officer Name</label>
 
                                 <input
                                     type="text"
@@ -151,15 +218,42 @@
 
                             </div>
 
+                            <div class="col-md-4 mb-3">
+
+                                <label class="form-label">Payment Status</label>
+
+                                <select
+                                    name="status"
+                                    class="form-select"
+                                    required>
+
+                                    <option value="Pending">Pending</option>
+
+                                    <option value="Paid">Paid</option>
+
+                                </select>
+
+                            </div>
+
                         </div>
+
+                        <hr>
+
+                        <!-- Date & Time -->
+
+                        <h5 class="text-primary mb-3">
+
+                            <i class="fa-solid fa-calendar-days me-2"></i>
+
+                            Date & Time
+
+                        </h5>
 
                         <div class="row">
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Date
-                                </label>
+                                <label class="form-label">Date</label>
 
                                 <input
                                     type="date"
@@ -171,9 +265,7 @@
 
                             <div class="col-md-6 mb-3">
 
-                                <label class="form-label">
-                                    Time
-                                </label>
+                                <label class="form-label">Time</label>
 
                                 <input
                                     type="time"
@@ -185,46 +277,27 @@
 
                         </div>
 
-                        <div class="mb-4">
+                        <hr>
 
-                            <label class="form-label">
-                                Payment Status
-                            </label>
+                        <!-- Buttons -->
 
-                            <select
-                                name="status"
-                                class="form-select"
-                                required>
-
-                                <option value="Pending">
-                                    Pending
-                                </option>
-
-                                <option value="Paid">
-                                    Paid
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="text-center">
+                        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
 
                             <button
                                 type="submit"
-                                class="btn btn-primary">
+                                class="btn btn-primary px-4">
 
-                                <i class="fa-solid fa-floppy-disk"></i>
+                                <i class="fa-solid fa-floppy-disk me-2"></i>
 
-                                Save Violation
+                                Save
 
                             </button>
 
                             <button
                                 type="reset"
-                                class="btn btn-secondary">
+                                class="btn btn-secondary px-4">
 
-                                <i class="fa-solid fa-rotate"></i>
+                                <i class="fa-solid fa-rotate me-2"></i>
 
                                 Reset
 
@@ -232,9 +305,9 @@
 
                             <a
                                 href="{% url 'violation_list' %}"
-                                class="btn btn-danger">
+                                class="btn btn-danger px-4">
 
-                                <i class="fa-solid fa-arrow-left"></i>
+                                <i class="fa-solid fa-arrow-left me-2"></i>
 
                                 Back
 
