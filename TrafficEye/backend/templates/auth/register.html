@@ -5,129 +5,94 @@
 {% block content %}
 
 <div class="container-fluid">
-
     <div class="row min-vh-100 align-items-center">
 
         <!-- Left Side -->
-
         <div class="col-lg-6 d-none d-lg-flex bg-success text-white justify-content-center align-items-center">
-
             <div class="text-center px-5">
-
                 <i class="fa-solid fa-user-shield fa-6x text-warning mb-4"></i>
 
                 <h1 class="fw-bold mb-3">
-
                     Join TrafficEye
-
                 </h1>
 
                 <p class="lead">
-
                     Smart Traffic Violation Management System
-
                 </p>
 
                 <p>
-
                     Create your account to securely manage traffic violations,
                     generate reports, search vehicles, and access the complete dashboard.
-
                 </p>
-
             </div>
-
         </div>
 
         <!-- Register Form -->
-
         <div class="col-lg-6">
+            <div class="d-flex justify-content-center align-items-center min-vh-100">
 
-            <div class="d-flex justify-content-center align-items-center">
-
-                <div class="card shadow-lg border-0 rounded-4 p-4 register-card">
+                <div class="card shadow-lg border-0 rounded-4 p-4 register-card" style="max-width:500px;width:100%;">
 
                     <div class="text-center mb-4">
-
                         <i class="fa-solid fa-user-plus fa-3x text-success mb-3"></i>
 
                         <h2 class="fw-bold">
-
                             Create Account
-
                         </h2>
 
                         <p class="text-muted">
-
                             Register to continue
-
                         </p>
-
                     </div>
 
+                    <!-- Error Message -->
+                    {% if message %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Success Messages -->
                     {% if messages %}
-
                         {% for message in messages %}
-
                             <div class="alert alert-{{ message.tags }}">
-
                                 {{ message }}
-
                             </div>
-
                         {% endfor %}
-
                     {% endif %}
 
                     <form method="POST">
-
                         {% csrf_token %}
 
-                        <!-- Name -->
-
+                        <!-- Full Name -->
                         <div class="mb-3">
-
                             <label class="form-label">
-
                                 Full Name
-
                             </label>
 
                             <div class="input-group">
-
                                 <span class="input-group-text">
-
                                     <i class="fa-solid fa-user"></i>
-
                                 </span>
 
                                 <input
                                     type="text"
-                                    name="name"
+                                    name="full_name"
                                     class="form-control"
                                     placeholder="Enter your full name"
                                     required>
-
                             </div>
-
                         </div>
 
                         <!-- Email -->
-
                         <div class="mb-3">
-
                             <label class="form-label">
-
                                 Email Address
-
                             </label>
 
                             <div class="input-group">
-
                                 <span class="input-group-text">
-
                                     <i class="fa-solid fa-envelope"></i>
-
                                 </span>
 
                                 <input
@@ -136,27 +101,39 @@
                                     class="form-control"
                                     placeholder="Enter your email"
                                     required>
-
                             </div>
-
                         </div>
 
-                        <!-- Password -->
-
+                        <!-- Mobile -->
                         <div class="mb-3">
-
                             <label class="form-label">
-
-                                Password
-
+                                Mobile Number
                             </label>
 
                             <div class="input-group">
-
                                 <span class="input-group-text">
+                                    <i class="fa-solid fa-phone"></i>
+                                </span>
 
+                                <input
+                                    type="text"
+                                    name="mobile"
+                                    class="form-control"
+                                    placeholder="Enter 10-digit mobile number"
+                                    maxlength="10"
+                                    required>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Password
+                            </label>
+
+                            <div class="input-group">
+                                <span class="input-group-text">
                                     <i class="fa-solid fa-lock"></i>
-
                                 </span>
 
                                 <input
@@ -175,27 +152,18 @@
                                     <i id="eye1" class="fa-solid fa-eye"></i>
 
                                 </button>
-
                             </div>
-
                         </div>
 
                         <!-- Confirm Password -->
-
                         <div class="mb-4">
-
                             <label class="form-label">
-
                                 Confirm Password
-
                             </label>
 
                             <div class="input-group">
-
                                 <span class="input-group-text">
-
                                     <i class="fa-solid fa-lock"></i>
-
                                 </span>
 
                                 <input
@@ -214,9 +182,7 @@
                                     <i id="eye2" class="fa-solid fa-eye"></i>
 
                                 </button>
-
                             </div>
-
                         </div>
 
                         <button
@@ -234,51 +200,39 @@
                     <hr>
 
                     <div class="text-center">
-
                         Already have an account?
 
                         <a href="{% url 'login' %}">
-
                             Login
-
                         </a>
-
                     </div>
 
                 </div>
 
             </div>
-
         </div>
 
     </div>
-
 </div>
 
 <script>
-
 function togglePassword(fieldId, iconId){
 
-    const field=document.getElementById(fieldId);
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById(iconId);
 
-    const icon=document.getElementById(iconId);
+    if(field.type === "password"){
 
-    if(field.type==="password"){
-
-        field.type="text";
-
+        field.type = "text";
         icon.classList.replace("fa-eye","fa-eye-slash");
 
     }else{
 
-        field.type="password";
-
+        field.type = "password";
         icon.classList.replace("fa-eye-slash","fa-eye");
 
     }
-
 }
-
 </script>
 
 {% endblock %}

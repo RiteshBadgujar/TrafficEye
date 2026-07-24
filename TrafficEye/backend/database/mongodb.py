@@ -7,6 +7,7 @@ import os
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
+DATABASE_NAME = os.getenv("DATABASE_NAME", "trafficeye")
 
 if not MONGO_URI:
     raise ValueError("MONGO_URI is not set in the .env file.")
@@ -20,7 +21,7 @@ try:
     # Verify the connection
     client.admin.command("ping")
 
-    db = client["trafficeye"]
+    db = client[DATABASE_NAME]
 
     users_collection = db["users"]
     violations_collection = db["violations"]

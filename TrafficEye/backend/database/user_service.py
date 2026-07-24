@@ -73,3 +73,12 @@ def delete_user(email):
     return users_collection.delete_one({
         "email": email
     })
+    
+from database.mongodb import users_collection
+
+def get_total_officers():
+    return users_collection.count_documents(
+        {
+            "role": "Officer"
+        }
+    )

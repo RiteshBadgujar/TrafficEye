@@ -1,6 +1,8 @@
 from bson import ObjectId
 from bson.errors import InvalidId
 from database.mongodb import violations_collection
+from datetime import datetime
+from collections import defaultdict
 
 
 # -------------------------------
@@ -216,4 +218,82 @@ def get_daily_report(date):
             {"date": date}
         ).sort("date", -1)
     )
-    
+
+def get_monthly_violation_stats():
+    """
+    Returns the number of violations for each month.
+    """
+
+    monthly_data = defaultdict(int)
+
+    violations = violations_collection.find()
+
+    for violation in violations:
+        try:
+            date = violation.get("date")
+
+            if not date:
+                continue
+
+            if isinstance(date, str):
+                date = datetime.strptime(date, "%Y-%m-%d")
+
+            month = date.strftime("%b")
+
+            monthly_data[month] += 1
+
+        except Exception:
+            continue
+
+    months = [
+        "Jan", "Feb", "Mar", "Apr",
+        "May", "Jun", "Jul", "Aug",
+        "Sep", "Oct", "Nov", "Dec"
+    ]
+
+    return [
+        {
+            "month": month,
+            "count": monthly_data.get(month, 0)
+        }
+        for month in months
+    ]
+
+def get_violation_type_stats():
+    """
+    Returns count of each violation type.
+    """
+
+    pipeline = [
+        {
+            "$group": {
+                "_id": "$violation_type",
+                "count": {"$sum": 1}
+            }
+        },
+        {
+            "$sort": {
+                "count": -1
+            }
+        }
+    ]
+
+    result = violations_collection.aggregate(pipeline)
+
+    return [
+        {
+            "type": item["_id"],
+            "count": item["count"]
+        }
+        for item in result
+    ]
+
+def get_payment_status_stats():
+    """
+    Returns paid and pending counts.
+    """
+
+    return {
+        "Paid": get_paid_fines(),
+        "Pending": get_pending_fines()
+    }

@@ -4,218 +4,172 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    fetch("/chart-data/")
-        .then(response => response.json())
-        .then(data => {
+    // ======================================
+    // Monthly Violations Bar Chart
+    // ======================================
 
-            // ===============================
-            // Monthly Violations Bar Chart
-            // ===============================
+    const monthlyCanvas = document.getElementById("monthlyChart");
 
-            const monthlyChart = document.getElementById("monthlyChart");
+    if (monthlyCanvas && typeof monthlyStats !== "undefined") {
 
-            if (monthlyChart) {
+        new Chart(monthlyCanvas, {
 
-                new Chart(monthlyChart, {
+            type: "bar",
 
-                    type: "bar",
+            data: {
 
-                    data: {
+                labels: monthlyStats.map(item => item.month),
 
-                        labels: [
-                            "Jan",
-                            "Feb",
-                            "Mar",
-                            "Apr",
-                            "May",
-                            "Jun",
-                            "Jul",
-                            "Aug",
-                            "Sep",
-                            "Oct",
-                            "Nov",
-                            "Dec"
-                        ],
+                datasets: [{
 
-                        datasets: [{
+                    label: "Traffic Violations",
 
-                            label: "Traffic Violations",
+                    data: monthlyStats.map(item => item.count),
 
-                            data: data.monthly,
+                    backgroundColor: "#0d6efd",
 
-                            backgroundColor: "#0d6efd"
+                    borderRadius: 6
 
-                        }]
+                }]
 
-                    },
+            },
 
-                    options: {
+            options: {
 
-                        responsive: true,
+                responsive: true,
 
-                        maintainAspectRatio: false
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
 
                     }
 
-                });
+                },
 
-            }
+                scales: {
 
-            // ===============================
-            // Paid vs Pending Pie Chart
-            // ===============================
+                    y: {
 
-            const statusChart = document.getElementById("statusChart");
+                        beginAtZero: true,
 
-            if (statusChart) {
+                        ticks: {
 
-                new Chart(statusChart, {
+                            precision: 0
 
-                    type: "pie",
-
-                    data: {
-
-                        labels: ["Paid", "Pending"],
-
-                        datasets: [{
-
-                            data: [
-
-                                data.paid,
-
-                                data.pending
-
-                            ],
-
-                            backgroundColor: [
-
-                                "#198754",
-
-                                "#ffc107"
-
-                            ]
-
-                        }]
-
-                    },
-
-                    options: {
-
-                        responsive: true,
-
-                        maintainAspectRatio: false
+                        }
 
                     }
 
-                });
+                }
 
             }
-
-            // ===============================
-            // Violation Types Doughnut Chart
-            // ===============================
-
-            const violationChart = document.getElementById("violationChart");
-
-            if (violationChart) {
-
-                new Chart(violationChart, {
-
-                    type: "doughnut",
-
-                    data: {
-
-                        labels: data.categories.labels,
-
-                        datasets: [{
-
-                            data: data.categories.values,
-
-                            backgroundColor: [
-
-                                "#0d6efd",
-
-                                "#198754",
-
-                                "#dc3545",
-
-                                "#ffc107",
-
-                                "#6f42c1",
-
-                                "#20c997",
-
-                                "#fd7e14"
-
-                            ]
-
-                        }]
-
-                    },
-
-                    options: {
-
-                        responsive: true,
-
-                        maintainAspectRatio: false
-
-                    }
-
-                });
-
-            }
-
-            // ===============================
-            // Yearly Line Chart
-            // ===============================
-
-            const yearlyChart = document.getElementById("yearlyChart");
-
-            if (yearlyChart) {
-
-                new Chart(yearlyChart, {
-
-                    type: "line",
-
-                    data: {
-
-                        labels: data.yearly.labels,
-
-                        datasets: [{
-
-                            label: "Violations",
-
-                            data: data.yearly.values,
-
-                            borderColor: "#dc3545",
-
-                            backgroundColor: "rgba(220,53,69,0.2)",
-
-                            fill: true,
-
-                            tension: 0.4
-
-                        }]
-
-                    },
-
-                    options: {
-
-                        responsive: true,
-
-                        maintainAspectRatio: false
-
-                    }
-
-                });
-
-            }
-
-        })
-        .catch(error => {
-
-            console.error("Error loading chart data:", error);
 
         });
+
+    }
+
+    // ======================================
+    // Paid vs Pending Pie Chart
+    // ======================================
+
+    const statusCanvas = document.getElementById("statusChart");
+
+    if (statusCanvas && typeof paymentStats !== "undefined") {
+
+        new Chart(statusCanvas, {
+
+            type: "pie",
+
+            data: {
+
+                labels: ["Paid", "Pending"],
+
+                datasets: [{
+
+                    data: [
+
+                        paymentStats.Paid,
+
+                        paymentStats.Pending
+
+                    ],
+
+                    backgroundColor: [
+
+                        "#198754",
+
+                        "#ffc107"
+
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        });
+
+    }
+
+    // ======================================
+    // Violation Types Doughnut Chart
+    // ======================================
+
+    const typeCanvas = document.getElementById("violationChart");
+
+    if (typeCanvas && typeof violationTypes !== "undefined") {
+
+        new Chart(typeCanvas, {
+
+            type: "doughnut",
+
+            data: {
+
+                labels: violationTypes.map(item => item.type),
+
+                datasets: [{
+
+                    data: violationTypes.map(item => item.count),
+
+                    backgroundColor: [
+
+                        "#0d6efd",
+                        "#198754",
+                        "#dc3545",
+                        "#ffc107",
+                        "#6f42c1",
+                        "#20c997",
+                        "#fd7e14",
+                        "#0dcaf0",
+                        "#6c757d"
+
+                    ]
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        });
+
+    }
 
 });

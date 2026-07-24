@@ -10,7 +10,11 @@ from database.violation_service import (
     get_total_violations,
     get_pending_fines,
     get_paid_fines,
+    get_total_collection,
     get_recent_violations,
+    get_monthly_violation_stats,
+    get_violation_type_stats,
+    get_payment_status_stats,
     search_by_vehicle,
 )
 
@@ -114,36 +118,37 @@ def register(request):
     
 def dashboard(request):
     """Display dashboard statistics for the logged-in user."""
-    
+
     if "user_id" not in request.session:
         return redirect("login")
-    
-    total_users = get_total_users()
-    total_violations = get_total_violations()
-    pending_fines = get_pending_fines()
-    paid_fines = get_paid_fines()
-    recent_violations = get_recent_violations()
-
 
     context = {
-
         "user_name": request.session.get("user_name"),
 
-        "total_users": total_users,
+        "total_users": get_total_users(),
 
-        "total_violations": total_violations,
+        "total_violations": get_total_violations(),
 
-        "pending_fines": pending_fines,
+        "pending_fines": get_pending_fines(),
 
-        "paid_fines": paid_fines,
+        "paid_fines": get_paid_fines(),
 
-        "recent_violations": recent_violations
+        "total_collection": get_total_collection(),
 
+        "recent_violations": get_recent_violations(),
+
+        "monthly_stats": get_monthly_violation_stats(),
+
+        "violation_types": get_violation_type_stats(),
+
+        "payment_stats": get_payment_status_stats(),
     }
 
-    return render(request,
-                  "dashboard/dashboard.html",
-                    context)
+    return render(
+        request,
+        "dashboard/dashboard.html",
+        context
+    )
     
 # ==========================
 # LOGOUT
