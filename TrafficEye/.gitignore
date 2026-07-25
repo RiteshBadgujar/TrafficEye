@@ -15,7 +15,9 @@ venv/
 env/
 ENV/
 
+# ==========================
 # Environment Variables
+# ==========================
 .env
 .env.*
 
@@ -47,16 +49,23 @@ htmlcov/
 media/
 staticfiles/
 
-# Migrations (Optional)
-# Uncomment if you don't want migrations in Git
-# */migrations/
-# !*/migrations/__init__.py
-
 # ==========================
 # Uploads
 # ==========================
 uploads/*
 !uploads/.gitkeep
+
+# ==========================
+# Build
+# ==========================
+build/
+dist/
+*.egg-info/
+
+# ==========================
+# Jupyter
+# ==========================
+.ipynb_checkpoints/
 
 # ==========================
 # Operating System
