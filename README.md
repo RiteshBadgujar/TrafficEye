@@ -1,243 +1,134 @@
-# 🚦 TrafficEye - City Traffic Violation Log Analyzer & Dashboard
+# TrafficEye - Traffic Violation Management System
 
-TrafficEye is a web-based Traffic Violation Management System developed using **Python, Django, and MongoDB**. The system helps traffic authorities manage traffic violations, monitor fine collections, generate reports, and maintain digital traffic records efficiently.
+TrafficEye is a web-based Traffic Violation Management System developed using Python, Django, Bootstrap, and MongoDB Atlas. The application helps manage traffic violations, track fines, generate reports, and monitor records through a secure and responsive interface.
 
----
+## Live Demo
 
-## 📌 Features
+Website: https://trafficeye-ohjn.onrender.com/
 
-### 👤 User Authentication
+## Features
 
-- User Registration
-- User Login
-- Secure Logout
-- Session-Based Authentication
-- Protected Dashboard
+- User Registration and Login
+- Traffic Violation Management
+- Add, Edit and Delete Violations
+- Search and Filter Records
+- Fine Payment Tracking
+- Dashboard with Statistics
+- Daily, Monthly and Yearly Reports
+- Export Reports to PDF and CSV
+- Responsive User Interface
 
-### 🚔 Traffic Violation Management
-
-- Add New Violation
-- View All Violations
-- Edit Violation Details
-- Delete Violation
-- Mark Fine as Paid
-
-### 🔍 Search & Filter
-
-- Search by Vehicle Number
-- Search by Owner Name
-- Filter by Violation Status
-- Filter by Violation Type
-- Sort by Newest/Oldest
-- Pagination Support
-
-### 📊 Reports
-
-- Dashboard Statistics
-- Daily Report
-- Monthly Report
-- Yearly Report
-- Vehicle Report
-- Officer Report
-- Pending Fine Report
-- Paid Fine Report
-
-### 📁 Export
-
-- Export Reports to CSV
-- Export Reports to PDF
-
----
-
-## 🛠️ Technologies Used
+## Technologies Used
 
 ### Frontend
-
 - HTML5
 - CSS3
 - Bootstrap 5
 - JavaScript
 
 ### Backend
-
 - Python
 - Django
 
 ### Database
+- MongoDB Atlas
 
-- MongoDB
+### Deployment
+- Render
 
 ### Libraries
-
 - PyMongo
 - ReportLab
 
----
+## Installation
 
-## 📂 Project Structure
-
-TrafficEye/
-│
-├── api/
-├── database/
-├── reports/
-├── users/
-├── violations/
-├── templates/
-├── static/
-├── media/
-├── config/
-├── manage.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-## ⚙️ Installation
-
-### 1. Clone Repository
+Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/TrafficEye.git
+git clone https://github.com/RiteshBadgujar/TrafficEye.git
 ```
 
-### 2. Go to Project Folder
+Go to the project directory:
 
 ```bash
 cd TrafficEye
 ```
 
-### 3. Create Virtual Environment
+Create a virtual environment:
 
 ```bash
 python -m venv venv
 ```
 
-### 4. Activate Virtual Environment
+Activate the virtual environment:
 
-### Windows
+**Windows**
 
 ```bash
 venv\Scripts\activate
 ```
 
-### Linux / macOS
+**Linux/macOS**
 
 ```bash
 source venv/bin/activate
 ```
 
-### 5. Install Dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 6. Configure MongoDB
-
-Start MongoDB Server and update your MongoDB connection in:
-
-```
-database/mongodb.py
-```
-
-### 7. Run Project
+Run the project:
 
 ```bash
 python manage.py runserver
 ```
 
-Open your browser:
+Open in your browser:
 
 ```
 http://127.0.0.1:8000/
 ```
 
----
+## Project Structure
 
-## 📸 Screenshots
+```
+TrafficEye/
+├── api/
+├── config/
+├── database/
+├── reports/
+├── users/
+├── violations/
+├── static/
+├── templates/
+├── media/
+├── manage.py
+├── requirements.txt
+└── README.md
+```
 
-Add screenshots of:
+## Future Enhancements
 
-- Home Page
-- Login
-- Register
-- Dashboard
-- Add Violation
-- Violation List
-- Reports
-- CSV Export
-- PDF Export
-
----
-
-## 📊 Modules
-
-### User Module
-
-- Registration
-- Login
-- Logout
-- Session Management
-
-### Violation Module
-
-- Add Violation
-- Edit Violation
-- Delete Violation
-- Fine Payment
-- Search
-- Filter
-- Pagination
-
-### Report Module
-
-- Dashboard
-- Daily Report
-- Monthly Report
-- Yearly Report
-- Vehicle Report
-- Officer Report
-- Pending Report
-- Paid Report
-
----
-
-## 🔒 Security Features
-
-- Session-Based Authentication
-- Protected Routes
-- Input Validation
-- MongoDB ObjectId Validation
-- Invalid Request Handling
-
----
-
-## 🚀 Future Enhancements
-
-- Admin & Officer Roles
+- Role-Based Authentication
 - Email Notifications
-- SMS Alerts
-- Payment Gateway Integration
-- Traffic Analytics Dashboard
-- Interactive Charts & Graphs
-- AI-Based Traffic Violation Prediction
-- REST API Integration
+- Online Fine Payment
 - Mobile Application
+- REST API
+- AI-Based Traffic Analytics
 
----
+## Developer
 
-## 👨‍💻 Developed By
-
-** Riteshkumar Badgujar**
+**Riteshkumar Badgujar**
 
 Master of Computer Applications (MCA)
 
 MET's Institute of Management Bhujbal Knowledge City, Nashik
 
----
+GitHub: https://github.com/RiteshBadgujar
 
-## ⭐ If you like this project
+## License
 
-Give this repository a ⭐ on GitHub.
+This project is developed for educational and learning purposes.
